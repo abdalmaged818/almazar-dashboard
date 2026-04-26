@@ -556,9 +556,172 @@
     .header-inner { gap: 14px; }
     .logo-placeholder { width: 52px; height: 52px; }
   }
+
+  /* ===== LOGIN SCREEN ===== */
+  .login-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: var(--bg-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background-image: radial-gradient(circle at 20% 80%, rgba(139,58,43,0.05) 0%, transparent 50%),
+                      radial-gradient(circle at 80% 20%, rgba(111,127,106,0.05) 0%, transparent 50%);
+  }
+  .login-card {
+    background: var(--bg-main);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 44px 40px 36px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: var(--shadow-lg);
+    text-align: center;
+    animation: loginSlideIn 0.35s ease;
+  }
+  @keyframes loginSlideIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .login-logo {
+    width: 68px;
+    height: 68px;
+    border-radius: var(--radius-md);
+    background: var(--bg-beige);
+    border: 2px dashed var(--card-beige);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 24px;
+    color: var(--text-secondary);
+    font-size: 10px;
+  }
+  .login-logo svg { display: block; margin: 0 auto 3px; }
+  .login-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--brown-primary);
+    margin-bottom: 6px;
+    letter-spacing: -0.3px;
+  }
+  .login-subtitle {
+    font-size: 12.5px;
+    color: var(--text-secondary);
+    margin-bottom: 32px;
+    line-height: 1.6;
+  }
+  .login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    text-align: right;
+  }
+  .login-input {
+    width: 100%;
+    padding: 13px 16px;
+    font-family: var(--font);
+    font-size: 14px;
+    color: var(--text-main);
+    background: var(--bg-beige);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    outline: none;
+    direction: rtl;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .login-input::placeholder { color: var(--text-secondary); }
+  .login-input:focus {
+    border-color: var(--brown-light);
+    box-shadow: 0 0 0 3px rgba(139,58,43,0.08);
+    background: var(--bg-main);
+  }
+  .login-button {
+    width: 100%;
+    padding: 14px;
+    font-family: var(--font);
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+    background: var(--brown-primary);
+    border: none;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    margin-top: 4px;
+    transition: background 0.2s, transform 0.1s;
+    letter-spacing: 0.3px;
+  }
+  .login-button:hover { background: var(--brown-hover); }
+  .login-button:active { transform: scale(0.98); }
+  .login-error {
+    font-size: 13px;
+    color: var(--red-negative);
+    background: #FFEBEE;
+    border: 1px solid #FFCDD2;
+    border-radius: var(--radius-sm);
+    padding: 10px 14px;
+    display: none;
+    text-align: center;
+  }
+  .login-error.visible { display: block; animation: shake 0.35s ease; }
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25%       { transform: translateX(-6px); }
+    75%       { transform: translateX(6px); }
+  }
+  .login-footer-text {
+    font-size: 11px;
+    color: var(--text-secondary);
+    margin-top: 28px;
+    opacity: 0.7;
+  }
+
+  /* ===== LOGOUT BUTTON ===== */
+  .logout-button {
+    flex-shrink: 0;
+    padding: 8px 16px;
+    font-family: var(--font);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--brown-primary);
+    background: var(--bg-beige);
+    border: 1.5px solid var(--border);
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
+    white-space: nowrap;
+  }
+  .logout-button:hover {
+    background: var(--brown-primary);
+    border-color: var(--brown-primary);
+    color: #fff;
+  }
 </style>
 </head>
 <body>
+
+<!-- ===== LOGIN SCREEN ===== -->
+<div id="loginScreen" class="login-screen">
+  <div class="login-card">
+    <div class="login-logo">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18M9 21V9"/></svg>
+      <div>الشعار</div>
+    </div>
+    <div class="login-title">تسجيل الدخول</div>
+    <div class="login-subtitle">لوحة إدارة التسويق — مطعم المزار الدمشقي</div>
+    <div class="login-form">
+      <input id="loginUsername" class="login-input" type="text" placeholder="اسم المستخدم" autocomplete="username" />
+      <input id="loginPassword" class="login-input" type="password" placeholder="كلمة المرور" autocomplete="current-password" />
+      <div id="loginError" class="login-error">بيانات الدخول غير صحيحة</div>
+      <button class="login-button" onclick="handleLogin()">دخول</button>
+    </div>
+    <div class="login-footer-text">خاص بإدارة مطعم المزار الدمشقي</div>
+  </div>
+</div>
+
+<!-- ===== DASHBOARD APP ===== -->
+<div id="dashboardApp" style="display:none">
 
 <!-- ===== HEADER ===== -->
 <header class="site-header">
@@ -575,6 +738,7 @@
         <span class="status-badge">قيد التحديث الأسبوعي</span>
       </div>
     </div>
+    <button class="logout-button" onclick="handleLogout()">تسجيل الخروج</button>
   </div>
 </header>
 
@@ -603,6 +767,8 @@
 <footer class="site-footer">
   إعداد إدارة التسويق — مطعم المزار الدمشقي
 </footer>
+
+</div><!-- end #dashboardApp -->
 
 <script>
 /* ==========================================
@@ -1122,7 +1288,70 @@ function init() {
   });
 }
 
-document.addEventListener('DOMContentLoaded', init);
+document.addEventListener('DOMContentLoaded', function() {
+  checkAuth();
+  // Allow Enter key on password field to trigger login
+  document.getElementById('loginPassword').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') handleLogin();
+  });
+  document.getElementById('loginUsername').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') handleLogin();
+  });
+});
+
+/* ==========================================
+   AUTH FUNCTIONS
+   ========================================== */
+const AUTH_KEY = 'almazar_dashboard_auth';
+const VALID_USER = 'almazar';
+const VALID_PASS = '12345';
+
+function checkAuth() {
+  if (localStorage.getItem(AUTH_KEY) === 'true') {
+    showDashboard();
+  } else {
+    showLogin();
+  }
+  // Always init dashboard content regardless (rendered hidden)
+  init();
+}
+
+function showDashboard() {
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('dashboardApp').style.display = 'block';
+}
+
+function showLogin() {
+  document.getElementById('dashboardApp').style.display = 'none';
+  document.getElementById('loginScreen').style.display = 'flex';
+}
+
+function handleLogin() {
+  const user = document.getElementById('loginUsername').value.trim();
+  const pass = document.getElementById('loginPassword').value;
+  const err  = document.getElementById('loginError');
+
+  if (user === VALID_USER && pass === VALID_PASS) {
+    err.classList.remove('visible');
+    localStorage.setItem(AUTH_KEY, 'true');
+    showDashboard();
+  } else {
+    err.classList.remove('visible');
+    // Force reflow to restart shake animation
+    void err.offsetWidth;
+    err.classList.add('visible');
+    document.getElementById('loginPassword').value = '';
+    document.getElementById('loginPassword').focus();
+  }
+}
+
+function handleLogout() {
+  localStorage.removeItem(AUTH_KEY);
+  document.getElementById('loginUsername').value = '';
+  document.getElementById('loginPassword').value = '';
+  document.getElementById('loginError').classList.remove('visible');
+  showLogin();
+}
 </script>
 </body>
 </html>
