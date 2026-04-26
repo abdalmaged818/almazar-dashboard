@@ -82,6 +82,34 @@
   .logo-placeholder:hover { border-color: var(--brown-light); }
   .logo-placeholder svg { display: block; margin: 0 auto 2px; }
 
+
+  .logo-container {
+    width: 72px;
+    height: 72px;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: var(--bg-beige);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .logo-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    padding: 6px;
+  }
+
+  .logo-container:hover {
+    transform: scale(1.03);
+    transition: transform 0.2s ease;
+  }
+
   .header-text { flex: 1; }
 
   .header-title {
@@ -599,6 +627,13 @@
     font-size: 10px;
   }
   .login-logo svg { display: block; margin: 0 auto 3px; }
+
+  .login-logo .logo-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 6px;
+  }
   .login-title {
     font-size: 22px;
     font-weight: 700;
@@ -705,8 +740,7 @@
 <div id="loginScreen" class="login-screen">
   <div class="login-card">
     <div class="login-logo">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18M9 21V9"/></svg>
-      <div>الشعار</div>
+      <img src="logo.png" alt="شعار المزار الدمشقي" class="logo-img">
     </div>
     <div class="login-title">تسجيل الدخول</div>
     <div class="login-subtitle">لوحة إدارة التسويق — مطعم المزار الدمشقي</div>
@@ -726,9 +760,8 @@
 <!-- ===== HEADER ===== -->
 <header class="site-header">
   <div class="header-inner">
-    <div class="logo-placeholder" title="انقر لإضافة الشعار">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18M9 21V9"/></svg>
-      <div style="font-size:9px;margin-top:2px">الشعار</div>
+    <div class="logo-container" title="شعار المزار الدمشقي">
+      <img src="logo.png" alt="شعار المزار الدمشقي" class="logo-img">
     </div>
     <div class="header-text">
       <div class="header-title">إدارة التسويق — مطعم المزار الدمشقي</div>
