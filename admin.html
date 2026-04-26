@@ -695,7 +695,7 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
         نسخ JSON
       </button>
-      <button class="btn btn-outline" onclick="window.open('index.html','_blank')">
+      <button class="btn btn-outline" onclick="window.open('client.html','_blank')">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
         معاينة صفحة العميل
       </button>
@@ -714,7 +714,17 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
 
+<!-- Supabase client library -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
+/* =============================================
+   SUPABASE CONFIG
+   غيّر المفتاح فقط: ضع Publishable key الخاص بك بدل PLACEHOLDER
+   ============================================= */
+const SUPABASE_URL = 'https://zxzitwqjkdadvyosvjx.supabase.co';
+const SUPABASE_PUBLISHABLE_KEY = 'PUT_YOUR_PUBLISHABLE_KEY_HERE';
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 /* =============================================
    NAVIGATION
    ============================================= */
@@ -1114,19 +1124,152 @@ function renderSummary() {
 /* =============================================
    SAVE
    ============================================= */
-function saveAll() {
+async function saveAll() {
   calcSales(); calcContent(); calcTiktok(); calcGmaps(); calcCampaigns(); calcInfluencers();
+
   const raw = collectData();
   const kpis = calcClientKPIs(raw);
+  const payload = { kpis, raw, _savedAt: raw._savedAt };
+
+  // حفظ محلي احتياطي داخل المتصفح
   localStorage.setItem('almazar_admin_data', JSON.stringify(raw));
-  localStorage.setItem('almazar_dashboard_data', JSON.stringify({ kpis, raw, _savedAt: raw._savedAt }));
+  localStorage.setItem('almazar_dashboard_data', JSON.stringify(payload));
+
   renderSummary();
+
   const badge = document.getElementById('saveStatusBadge');
-  badge.textContent = 'تم الحفظ ✓';
-  badge.style.background = '#E8F5E9';
-  badge.style.color = '#2E7D32';
-  badge.style.borderColor = '#A5D6A7';
-  showToast('تم حفظ البيانات وتجهيز بيانات صفحة العميل بنجاح ✓', 'green');
+  badge.textContent = 'جارِ الحفظ...';
+  badge.style.background = '#FFF8E1';
+  badge.style.color = '#B45309';
+  badge.style.borderColor = '#FBBF24';
+
+  // حفظ سحابي في Supabase
+  const cloudResult = await saveReportToSupabase(raw, kpis);
+
+  if (cloudResult.ok) {
+    badge.textContent = 'تم الحفظ السحابي ✓';
+    badge.style.background = '#E8F5E9';
+    badge.style.color = '#2E7D32';
+    badge.style.borderColor = '#A5D6A7';
+    showToast('تم حفظ البيانات في Supabase وتجهيز بيانات صفحة العميل بنجاح ✓', 'green');
+  } else {
+    badge.textContent = 'حفظ محلي فقط';
+    badge.style.background = '#FFF8E1';
+    badge.style.color = '#B45309';
+    badge.style.borderColor = '#FBBF24';
+    showToast('تم الحفظ محليًا، لكن لم يتم الحفظ في Supabase. راجع المفتاح أو الجدول.', 'warn');
+    console.warn('Supabase save error:', cloudResult.error);
+  }
+}
+
+
+
+/* =============================================
+   SUPABASE SAVE HELPERS
+   ============================================= */
+function isSupabaseConfigured() {
+  return SUPABASE_PUBLISHABLE_KEY && SUPABASE_PUBLISHABLE_KEY !== 'PUT_YOUR_PUBLISHABLE_KEY_HERE';
+}
+
+function buildSupabaseFullRow(raw, kpis) {
+  const report = raw.report || {};
+  const content = raw.content || {};
+  const tiktok = raw.tiktok || {};
+  const instagram = raw.instagram || {};
+  const sales = raw.sales || {};
+  const notes = raw.notes || {};
+
+  return {
+    client_name: report.client || 'مطعم المزار الدمشقي',
+    report_name: report.name || '',
+    month: report.month || '',
+    week: report.week ? `الأسبوع ${report.week}` : '',
+    week_number: report.week ? Number(report.week) : null,
+    period_from: report.from || null,
+    period_to: report.to || null,
+    status: report.status || 'مسودة',
+    summary: report.summary || '',
+
+    videos: Number(content.organic || 0) + Number(content.adv || 0),
+    stories: Number(content.igStories || 0),
+    designs: Number(content.designs || 0),
+    tiktok_views: Number(tiktok.currViews || 0),
+    instagram_views: Number(instagram.views || 0),
+    comments_replied: Number(tiktok.replied || 0) + Number(instagram.repliedComments || 0),
+    messages_replied: Number(tiktok.msgs || 0) + Number(instagram.repliedDMs || 0),
+    new_followers: 0,
+    sales: Number(sales.currSales || 0),
+    orders: Number(sales.currInv || 0),
+    notes: [notes.marketing, notes.ops, notes.platforms, notes.sales, notes.recommendation].filter(Boolean).join('\n\n'),
+
+    raw_data: raw,
+    dashboard_data: kpis,
+    updated_at: new Date().toISOString()
+  };
+}
+
+function buildSupabaseSimpleRow(raw) {
+  const report = raw.report || {};
+  const content = raw.content || {};
+  const tiktok = raw.tiktok || {};
+  const instagram = raw.instagram || {};
+  const sales = raw.sales || {};
+  const notes = raw.notes || {};
+
+  return {
+    week: report.week ? `الأسبوع ${report.week}` : 'الأسبوع الحالي',
+    date: report.to || new Date().toISOString().slice(0, 10),
+    videos: Number(content.organic || 0) + Number(content.adv || 0),
+    stories: Number(content.igStories || 0),
+    designs: Number(content.designs || 0),
+    tiktok_views: Number(tiktok.currViews || 0),
+    instagram_views: Number(instagram.views || 0),
+    comments_replied: Number(tiktok.replied || 0) + Number(instagram.repliedComments || 0),
+    messages_replied: Number(tiktok.msgs || 0) + Number(instagram.repliedDMs || 0),
+    new_followers: 0,
+    sales: Number(sales.currSales || 0),
+    orders: Number(sales.currInv || 0),
+    notes: [report.summary, notes.marketing, notes.ops, notes.platforms, notes.sales, notes.recommendation].filter(Boolean).join('\n\n')
+  };
+}
+
+async function saveReportToSupabase(raw, kpis) {
+  if (!isSupabaseConfigured()) {
+    return { ok: false, error: 'Supabase publishable key is missing. Replace PUT_YOUR_PUBLISHABLE_KEY_HERE.' };
+  }
+
+  const fullRow = buildSupabaseFullRow(raw, kpis);
+  let { error } = await supabaseClient.from('reports').insert([fullRow]);
+
+  if (!error) return { ok: true };
+
+  console.warn('Full Supabase insert failed, trying simple row:', error);
+
+  const simpleRow = buildSupabaseSimpleRow(raw);
+  const fallback = await supabaseClient.from('reports').insert([simpleRow]);
+
+  if (fallback.error) {
+    return { ok: false, error: fallback.error };
+  }
+
+  return { ok: true, fallback: true };
+}
+
+async function loadLatestReportFromSupabase() {
+  if (!isSupabaseConfigured()) return null;
+
+  const { data, error } = await supabaseClient
+    .from('reports')
+    .select('*')
+    .order('created_at', { ascending: false })
+    .limit(1);
+
+  if (error) {
+    console.warn('Supabase load error:', error);
+    return null;
+  }
+
+  return data && data.length ? data[0] : null;
 }
 
 /* =============================================
