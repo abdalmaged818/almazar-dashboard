@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>إدارة التسويق — مطعم المزار الدمشقي</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=hIBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap');
 :root{
   --bg:#FFFFFF;--bg2:#F7F5F2;--bg3:#F5F2EE;--card:#E8E1D9;
   --br:#8B3A2B;--brh:#7A3225;--brl:#A65A4A;--olive:#6F7F6A;
@@ -243,8 +243,8 @@ body{font-family:var(--font);background:var(--bg2);color:var(--t1);min-height:10
 // ============================================================
 // SUPABASE CONFIG
 // ============================================================
-const SUPABASE_URL = 'YOUR_SUPABASE_URL';
-const SUPABASE_KEY = 'YOUR_SUPABASE_PUBLISHABLE_KEY';
+const SUPABASE_URL = 'https://zxziztwqjkdadvyosyjx.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp4eml6dHdxamtkYWR2eW9zeWp4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMDQ4ODYsImV4cCI6MjA5Mjc4MDg4Nn0.pcNZp6M8psO6sBO3jhOz0Jrgv23XoYe5KV5NloDsieI';
 
 let supabase = null;
 let currentData = null;
@@ -293,7 +293,7 @@ async function loadReport() {
 
   main.innerHTML = '<div id="loadingState"><div class="spinner"></div><p>جارٍ التحميل...</p></div>';
 
-  if (!supabase || SUPABASE_URL === 'YOUR_SUPABASE_URL') {
+  if (!supabase || SUPABASE_URL === 'https://zxziztwqjkdadvyosyjx.supabase.co') {
     renderNoConfig();
     return;
   }
@@ -601,7 +601,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   await initSupabase();
 
-  if (!supabase || SUPABASE_URL === 'YOUR_SUPABASE_URL') {
+  if (!supabase || SUPABASE_URL === 'https://zxziztwqjkdadvyosyjx.supabase.co') {
     // Load latest report without filter
     renderNoConfig();
     return;
