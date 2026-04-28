@@ -307,7 +307,7 @@ async function loadReport() {
     .order('created_at', { ascending: false })
     .limit(1);
 
-  console.log('Supabase connected:', supabase);      console.log('Fetched reports:', data);
+  console.log('Loading report...');if(error||!data||!data.length){
     renderEmpty();
     return;
   }
