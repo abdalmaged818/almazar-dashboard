@@ -232,7 +232,7 @@ body{font-family:var(--font);background:var(--bg2);color:var(--t1);min-height:10
     <div class="spinner"></div>
     <p>جارٍ تحميل التقرير...</p>
   </div>
-</main>
+<div id="rawDataCard" style="display:none;margin:20px 32px;padding:16px;background:#fff3cd;border:1px solid #ffc107;border-radius:8px;"></div>  </main>
 
 <!-- FOOTER -->
 <footer class="footer">
@@ -293,34 +293,34 @@ async function loadReport() {
 
   main.innerHTML = '<div id="loadingState"><div class="spinner"></div><p>جارٍ التحميل...</p></div>';
 
-  if (!supabase || SUPABASE_URL === 'https://zxziztwqjkdadvyosyjx.supabase.co') {
+  if (!supabase || SUPABASE_URL === 'YOUR_SUPABASE_URL') {
     renderNoConfig();
     return;
   }
 
   const { data, error } = await supabase
     .from('reports')
-    .select('dashboard_data, report_data, created_at, status')
-    .eq('month', month)
-    .eq('week_number', week)
+    .select('*')
+    .not('id', 'is', null)
+    .not('id', 'is', null)
     .eq('status', 'published')
     .order('created_at', { ascending: false })
     .limit(1);
 
-  if (error || !data || data.length === 0) {
+  console.log('Supabase connected:', supabase);      console.log('Fetched reports:', data);
     renderEmpty();
     return;
   }
 
   currentData = data[0];
-  const d = data[0].dashboard_data;
+  const dRaw = data[0].dashboard_data; const d = dRaw && dRaw.summary ? dRaw.summary : dRaw;
   const rd = data[0].report_data;
   const date = new Date(data[0].created_at).toLocaleDateString('ar-SA', {
     year:'numeric', month:'long', day:'numeric'
   });
 
   document.getElementById('reportDateLabel').textContent = 'آخر تحديث: ' + date;
-  renderDashboard(d, rd);
+  renderDashboard(d, rd);      const rawCard = document.getElementById('rawDataCard');      if (rawCard) rawCard.innerHTML = '<h3 style="margin:0 0 8px;font-size:14px;">بيانات التقرير الخام</h3><pre style="white-space:pre-wrap;font-size:11px;direction:ltr;text-align:left;">' + JSON.stringify(dRaw, null, 2) + '</pre>';      if (rawCard) rawCard.style.display = 'block';      const rawCard = document.getElementById('rawDataCard');
 }
 
 // ============================================================
@@ -601,7 +601,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   await initSupabase();
 
-  if (!supabase || SUPABASE_URL === 'https://zxziztwqjkdadvyosyjx.supabase.co') {
+  if (!supabase || SUPABASE_URL === 'YOUR_SUPABASE_URL') {
     // Load latest report without filter
     renderNoConfig();
     return;
