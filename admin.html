@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>لوحة إدخال البيانات — المزار الدمشقي</title>
+<title>لوحة الإدخال — المزار الدمشقي</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap');
 :root{
@@ -12,1421 +12,1343 @@
   --green:#2E7D32;--gsoft:#E8F5E9;--red:#C62828;--amber:#F9A825;--blue:#1565C0;
   --t1:#1F1F1F;--t2:#6B6B6B;--border:#EAE6E1;
   --sh1:0 1px 4px rgba(0,0,0,.06);--sh2:0 4px 16px rgba(0,0,0,.09);--sh3:0 8px 32px rgba(0,0,0,.11);
-  --r1:8px;--r2:14px;--r3:20px;
-  --font:'IBM Plex Sans Arabic','Segoe UI',Tahoma,sans-serif;
+  --r:10px;--font:'IBM Plex Sans Arabic',sans-serif;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:var(--font);background:var(--bg2);color:var(--t1);direction:rtl;font-size:14px;line-height:1.7;min-height:100vh}
+body{font-family:var(--font);background:var(--bg2);color:var(--t1);min-height:100vh;direction:rtl}
+a{text-decoration:none;color:inherit}
+button{cursor:pointer;font-family:var(--font)}
+input,textarea,select{font-family:var(--font);direction:rtl}
 
-/* HEADER */
-.hdr{background:var(--bg);border-bottom:1px solid var(--border);padding:0 32px;position:sticky;top:0;z-index:200;box-shadow:var(--sh1);display:flex;align-items:center;gap:0;min-height:64px}
-.hdr-logo{width:40px;height:40px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r1);display:flex;align-items:center;justify-content:center;color:var(--br);flex-shrink:0;margin-left:14px}
-.hdr-info{flex:1}
-.hdr-title{font-size:16px;font-weight:700;color:var(--br)}
-.hdr-sub{font-size:11px;color:var(--t2)}
-.hdr-actions{display:flex;gap:8px;align-items:center;flex-shrink:0}
-.hdr-badge{font-size:11px;font-weight:600;background:#FFF8E1;color:#B45309;border:1px solid #FBBF24;padding:3px 10px;border-radius:20px}
+/* TOP NAV */
+.topnav{
+  background:#fff;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 28px;height:60px;position:sticky;top:0;z-index:100;
+  box-shadow:var(--sh1);
+}
+.nav-brand{display:flex;align-items:center;gap:10px}
+.nav-brand img{height:36px;border-radius:6px}
+.nav-brand span{font-size:15px;font-weight:600;color:var(--br)}
+.nav-right{display:flex;align-items:center;gap:12px}
+.status-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:4px 12px;border-radius:20px;font-size:12px;font-weight:600;
+  background:var(--gsoft);color:var(--green);border:1px solid #c8e6c9;
+}
+.status-dot{width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 
-/* LAYOUT */
-.layout{display:flex;min-height:calc(100vh - 64px)}
+/* MAIN TABS */
+.main-tabs{
+  display:flex;gap:4px;padding:20px 28px 0;
+  border-bottom:1px solid var(--border);background:#fff;
+  position:sticky;top:60px;z-index:90;
+}
+.tab-btn{
+  padding:10px 20px;border-radius:8px 8px 0 0;border:none;
+  background:transparent;color:var(--t2);font-size:13px;font-weight:500;
+  border-bottom:2px solid transparent;transition:all .2s;
+}
+.tab-btn.active{
+  background:var(--bg2);color:var(--br);
+  border-bottom:2px solid var(--br);font-weight:600;
+}
+.tab-btn:hover:not(.active){background:var(--bg3);color:var(--t1)}
 
-/* SIDEBAR */
-.sidebar{width:220px;flex-shrink:0;background:var(--bg);border-left:1px solid var(--border);padding:20px 0;position:sticky;top:64px;height:calc(100vh - 64px);overflow-y:auto}
-.sidebar::-webkit-scrollbar{width:4px}.sidebar::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
-.sb-group-label{font-size:10px;font-weight:700;color:var(--t2);letter-spacing:1.5px;padding:12px 18px 6px;text-transform:uppercase}
-.sb-btn{display:flex;align-items:center;gap:10px;width:100%;padding:9px 18px;background:transparent;border:none;cursor:pointer;font-family:var(--font);font-size:13px;font-weight:500;color:var(--t2);text-align:right;transition:background .15s,color .15s;border-right:3px solid transparent}
-.sb-btn:hover{background:var(--bg3);color:var(--t1)}
-.sb-btn.active{background:var(--bg3);color:var(--br);font-weight:700;border-right-color:var(--br)}
-.sb-num{font-size:10px;background:var(--bg3);color:var(--t2);padding:1px 6px;border-radius:10px;margin-right:auto;font-weight:600}
-.sb-btn.active .sb-num{background:rgba(139,58,43,.12);color:var(--br)}
+/* CONTENT AREA */
+.content{padding:24px 28px;max-width:1200px;margin:0 auto}
+.tab-panel{display:none}
+.tab-panel.active{display:block}
 
-/* CONTENT */
-.content{flex:1;padding:28px 32px 60px;min-width:0}
-.section{display:none;animation:fadeIn .2s ease}
-.section.active{display:block}
-@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-
-/* SECTION HEADER */
-.sec-hdr{margin-bottom:22px}
-.sec-title{font-size:20px;font-weight:700;color:var(--br);margin-bottom:4px}
-.sec-desc{font-size:13px;color:var(--t2)}
-
-/* CARD */
-.card{background:var(--bg);border:1px solid var(--border);border-radius:var(--r2);padding:24px;box-shadow:var(--sh1);margin-bottom:18px}
-.card-title{font-size:13px;font-weight:700;color:var(--br);margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
-.card-title-icon{width:28px;height:28px;background:var(--bg3);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:14px}
+/* SECTION CARD */
+.section-card{
+  background:#fff;border-radius:var(--r);border:1px solid var(--border);
+  box-shadow:var(--sh1);margin-bottom:20px;overflow:hidden;
+}
+.section-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 20px;background:#fff;border-bottom:1px solid var(--border);
+  cursor:pointer;user-select:none;
+}
+.section-head h3{font-size:14px;font-weight:600;color:var(--t1);display:flex;align-items:center;gap:8px}
+.section-icon{
+  width:32px;height:32px;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--bg3);font-size:16px;
+}
+.section-body{padding:20px}
+.section-body.collapsed{display:none}
+.toggle-arrow{font-size:12px;color:var(--t2);transition:transform .2s}
+.toggle-arrow.open{transform:rotate(180deg)}
 
 /* GRID */
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
-.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
-.span2{grid-column:span 2}
-.span3{grid-column:span 3}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
 
-/* FIELD */
-.field{display:flex;flex-direction:column;gap:5px}
-.field label{font-size:12px;font-weight:600;color:var(--t1)}
-.field-hint{font-size:11px;color:var(--t2);margin-top:-3px}
-input[type=text],input[type=number],input[type=date],input[type=url],select,textarea{
-  width:100%;padding:10px 13px;font-family:var(--font);font-size:13px;color:var(--t1);
-  background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--r1);
-  outline:none;direction:rtl;transition:border-color .2s,box-shadow .2s,background .2s;
-  -moz-appearance:textfield
+/* FORM ELEMENTS */
+.field-group{margin-bottom:16px}
+.field-label{
+  display:block;font-size:12px;font-weight:600;
+  color:var(--t2);margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px;
 }
-input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none}
-input:focus,select:focus,textarea:focus{border-color:var(--brl);box-shadow:0 0 0 3px rgba(139,58,43,.08);background:var(--bg)}
-input::placeholder,textarea::placeholder{color:var(--card)}
-textarea{resize:vertical;min-height:90px;line-height:1.7}
-select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6 7L11 1' stroke='%236B6B6B' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:left 12px center}
+.field-input{
+  width:100%;padding:10px 14px;border:1.5px solid var(--border);
+  border-radius:8px;font-size:13px;color:var(--t1);background:#fff;
+  transition:border-color .2s;outline:none;
+}
+.field-input:focus{border-color:var(--br)}
+.field-input::placeholder{color:#bbb}
+textarea.field-input{min-height:80px;resize:vertical;line-height:1.6}
+select.field-input{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M6 8L0 0h12z' fill='%236B6B6B'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:left 12px center}
 
-/* AUTO CALC BADGE */
-.calc-row{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r1);padding:14px 16px;margin-top:4px}
-.calc-label{font-size:11px;font-weight:600;color:var(--t2);margin-bottom:8px;text-transform:uppercase;letter-spacing:.8px}
-.calc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px}
-.calc-item{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 13px}
-.calc-item-label{font-size:11px;color:var(--t2);margin-bottom:3px}
-.calc-item-val{font-size:17px;font-weight:700;color:var(--t1)}
-.calc-item-val.pos{color:var(--green)}
-.calc-item-val.neg{color:var(--red)}
-.calc-item-val.br{color:var(--br)}
+/* NUMBER INPUT */
+.number-input-wrap{position:relative}
+.num-ctrl{
+  position:absolute;display:flex;flex-direction:column;
+  left:2px;top:2px;bottom:2px;gap:1px;
+}
+.num-btn{
+  flex:1;border:none;background:var(--bg3);border-radius:4px;
+  font-size:11px;color:var(--t2);padding:0 6px;min-width:24px;
+  transition:background .15s;line-height:1;
+}
+.num-btn:hover{background:var(--card);color:var(--t1)}
+.num-field{padding-left:36px!important}
 
-/* REPEATABLE */
-.repeat-block{border:1px solid var(--border);border-radius:var(--r2);margin-bottom:16px;overflow:hidden}
-.repeat-hdr{background:var(--bg3);padding:12px 18px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none}
-.repeat-hdr-title{font-size:13px;font-weight:700;color:var(--t1);display:flex;align-items:center;gap:8px}
-.repeat-hdr-num{font-size:10px;background:var(--br);color:#fff;padding:1px 8px;border-radius:20px}
-.repeat-body{padding:20px;border-top:1px solid var(--border)}
-.btn-remove{padding:4px 12px;background:#FFEBEE;color:var(--red);border:1px solid #FFCDD2;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;font-family:var(--font);transition:background .15s}
-.btn-remove:hover{background:#FFCDD2}
-.btn-add{display:flex;align-items:center;gap:8px;padding:11px 18px;background:var(--bg3);border:1.5px dashed var(--border);border-radius:var(--r2);font-family:var(--font);font-size:13px;font-weight:600;color:var(--br);cursor:pointer;width:100%;transition:border-color .2s,background .2s;margin-top:4px}
-.btn-add:hover{border-color:var(--brl);background:#FDF8F6}
+/* METRICS GRID */
+.metrics-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.metric-box{
+  background:#fff;border-radius:10px;border:1px solid var(--border);
+  padding:16px;text-align:center;transition:box-shadow .2s;
+}
+.metric-box:hover{box-shadow:var(--sh2)}
+.metric-val{font-size:28px;font-weight:700;color:var(--br);line-height:1}
+.metric-label{font-size:11px;color:var(--t2);margin-top:6px;font-weight:500}
 
-/* STAR RATING */
-.stars{display:flex;gap:4px;flex-direction:row-reverse;justify-content:flex-end}
-.stars input{display:none}.stars label{font-size:22px;color:var(--border);cursor:pointer;transition:color .15s}
-.stars input:checked~label,.stars label:hover,.stars label:hover~label{color:var(--amber)}
+/* TASK LIST */
+.task-list{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.task-item{
+  display:flex;align-items:center;gap:12px;
+  padding:12px 16px;border-radius:8px;border:1px solid var(--border);
+  background:#fff;transition:all .2s;
+}
+.task-item:hover{box-shadow:var(--sh1);border-color:var(--brl)}
+.task-item.done{opacity:.6;background:var(--bg3)}
+.task-item.done .task-title{text-decoration:line-through;color:var(--t2)}
+.task-check{
+  width:20px;height:20px;border-radius:50%;border:2px solid var(--border);
+  cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  transition:all .2s;font-size:11px;
+}
+.task-check.checked{background:var(--green);border-color:var(--green);color:#fff}
+.task-meta{flex:1;min-width:0}
+.task-title{font-size:13px;font-weight:500;color:var(--t1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.task-sub{font-size:11px;color:var(--t2);margin-top:2px}
+.task-badge{
+  font-size:11px;font-weight:600;padding:3px 8px;border-radius:12px;white-space:nowrap;
+}
+.badge-content{background:#E3F2FD;color:#1565C0}
+.badge-engagement{background:#F3E5F5;color:#6A1B9A}
+.badge-campaign{background:#FFF8E1;color:#F57F17}
+.badge-gmaps{background:#E8F5E9;color:#2E7D32}
+.badge-delivery{background:#FBE9E7;color:#BF360C}
+.badge-sales{background:#E0F2F1;color:#00695C}
+.badge-other{background:var(--bg3);color:var(--t2)}
+.task-priority{
+  font-size:10px;padding:2px 7px;border-radius:10px;font-weight:600;
+}
+.priority-high{background:#FFEBEE;color:#C62828}
+.priority-medium{background:#FFF8E1;color:#F57F17}
+.priority-low{background:#E8F5E9;color:#2E7D32}
+.task-del{
+  border:none;background:none;color:var(--t2);font-size:14px;
+  padding:4px;border-radius:4px;opacity:0;transition:opacity .2s;
+}
+.task-item:hover .task-del{opacity:1}
+.task-del:hover{background:#FFEBEE;color:var(--red)}
+.status-tag{
+  font-size:11px;padding:2px 8px;border-radius:10px;font-weight:500;
+}
+.status-pending{background:#FFF3E0;color:#E65100}
+.status-inprogress{background:#E3F2FD;color:#1565C0}
+.status-done{background:#E8F5E9;color:#2E7D32}
 
-/* STATUS CHIPS */
-.status-chip{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px}
-.chip-done{background:var(--gsoft);color:var(--green);border:1px solid #A5D6A7}
-.chip-pending{background:#FFF8E1;color:#B45309;border:1px solid #FBBF24}
-.chip-draft{background:#F3E5F5;color:#6A1B9A;border:1px solid #CE93D8}
+/* REPORT SECTIONS */
+.report-section{
+  background:var(--bg3);border-radius:8px;padding:16px;margin-bottom:12px;
+  border-right:3px solid var(--br);
+}
+.report-section h4{font-size:13px;font-weight:600;color:var(--br);margin-bottom:12px}
 
-/* SUMMARY CARDS */
-.summary-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px;margin-bottom:20px}
-.summary-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--r2);padding:18px;box-shadow:var(--sh1)}
-.summary-card-label{font-size:11px;color:var(--t2);margin-bottom:6px;font-weight:500}
-.summary-card-val{font-size:22px;font-weight:700;color:var(--t1)}
-.summary-card-val.pos{color:var(--green)}
-.summary-card-val.br{color:var(--br)}
+/* WEEK SELECTOR */
+.week-selector{
+  display:flex;gap:10px;align-items:center;
+  background:#fff;border:1px solid var(--border);border-radius:10px;
+  padding:12px 16px;margin-bottom:20px;
+}
+.week-selector label{font-size:12px;font-weight:600;color:var(--t2);white-space:nowrap}
 
-/* ACTION BUTTONS */
-.action-bar{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
-.btn{padding:11px 20px;font-family:var(--font);font-size:13px;font-weight:700;border-radius:var(--r1);border:none;cursor:pointer;transition:background .15s,transform .1s;display:flex;align-items:center;gap:7px;white-space:nowrap}
-.btn:active{transform:scale(.97)}
-.btn-primary{background:var(--br);color:#fff}.btn-primary:hover{background:var(--brh)}
-.btn-outline{background:var(--bg3);color:var(--t1);border:1.5px solid var(--border)}.btn-outline:hover{background:var(--card)}
-.btn-green{background:var(--green);color:#fff}.btn-green:hover{background:#1B5E20}
-.btn-ghost{background:transparent;color:var(--t2);border:1.5px solid var(--border)}.btn-ghost:hover{background:var(--bg3)}
-.btn-danger{background:#FFEBEE;color:var(--red);border:1.5px solid #FFCDD2}.btn-danger:hover{background:#FFCDD2}
+/* BTN */
+.btn{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:9px 18px;border-radius:8px;border:none;
+  font-size:13px;font-weight:600;transition:all .2s;
+}
+.btn-primary{background:var(--br);color:#fff}
+.btn-primary:hover{background:var(--brh)}
+.btn-success{background:var(--green);color:#fff}
+.btn-success:hover{background:#1B5E20}
+.btn-outline{background:#fff;color:var(--br);border:1.5px solid var(--br)}
+.btn-outline:hover{background:var(--bg3)}
+.btn-danger{background:var(--red);color:#fff}
+.btn-danger:hover{background:#B71C1C}
+.btn-sm{padding:6px 12px;font-size:12px}
+.btn-amber{background:var(--amber);color:#fff}
+.btn-amber:hover{background:#F57F17}
 
 /* TOAST */
-.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--green);color:#fff;font-family:var(--font);font-size:13px;font-weight:600;padding:13px 24px;border-radius:40px;box-shadow:var(--sh3);display:flex;align-items:center;gap:9px;z-index:9999;opacity:0;transition:transform .35s cubic-bezier(.34,1.56,.64,1),opacity .3s;white-space:nowrap}
-.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
-.toast.warn{background:var(--amber)}
+#toast{
+  position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);
+  background:#1F1F1F;color:#fff;padding:12px 24px;border-radius:10px;
+  font-size:13px;font-weight:500;z-index:9999;transition:transform .3s;
+  box-shadow:var(--sh3);pointer-events:none;
+}
+#toast.show{transform:translateX(-50%) translateY(0)}
+#toast.success{background:var(--green)}
+#toast.error{background:var(--red)}
 
-/* SECTION DIVIDER */
-.divider{height:1px;background:var(--border);margin:20px 0}
+/* WORKFLOW STATUS BAR */
+.workflow-bar{
+  display:flex;align-items:center;gap:8px;
+  padding:10px 20px;border-top:1px solid var(--border);
+  background:var(--bg3);
+}
+.workflow-btn{
+  padding:5px 14px;border-radius:16px;border:none;font-size:12px;font-weight:600;
+  cursor:pointer;transition:all .2s;
+}
+.workflow-btn.draft{background:#E3F2FD;color:#1565C0}
+.workflow-btn.published{background:var(--gsoft);color:var(--green)}
+.workflow-btn.archived{background:var(--bg3);color:var(--t2)}
+.workflow-btn.active{box-shadow:0 0 0 2px currentColor}
+.workflow-label{font-size:12px;color:var(--t2);font-weight:500}
 
-/* PLATFORM TABS */
-.ptabs{display:flex;gap:2px;background:var(--bg3);border-radius:var(--r1);padding:3px;margin-bottom:18px;border:1px solid var(--border)}
-.ptab-btn{flex:1;padding:8px;font-family:var(--font);font-size:12px;font-weight:600;color:var(--t2);background:transparent;border:none;border-radius:6px;cursor:pointer;transition:background .15s,color .15s}
-.ptab-btn.active{background:var(--bg);color:var(--br);box-shadow:var(--sh1)}
-.ptab-pane{display:none}.ptab-pane.active{display:block}
+/* TABLE */
+.data-table{width:100%;border-collapse:collapse}
+.data-table th{
+  font-size:11px;font-weight:600;color:var(--t2);text-align:right;
+  padding:10px 12px;background:var(--bg3);border-bottom:1px solid var(--border);
+  text-transform:uppercase;letter-spacing:.5px;
+}
+.data-table td{
+  padding:12px;border-bottom:1px solid var(--bg3);
+  font-size:13px;color:var(--t1);
+}
+.data-table tr:last-child td{border-bottom:none}
+.data-table tr:hover td{background:var(--bg3)}
 
+/* LOADING */
+.loading-overlay{
+  position:fixed;inset:0;background:rgba(255,255,255,.85);
+  display:flex;align-items:center;justify-content:center;
+  z-index:9999;display:none;
+}
+.loading-overlay.show{display:flex}
+.spinner{
+  width:40px;height:40px;border:3px solid var(--border);
+  border-top-color:var(--br);border-radius:50%;animation:spin .8s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
 
+/* EMPTY STATE */
+.empty-state{
+  text-align:center;padding:40px;color:var(--t2);
+}
+.empty-icon{font-size:40px;margin-bottom:12px}
+.empty-text{font-size:14px;font-weight:500}
+.empty-sub{font-size:12px;margin-top:6px}
 
-/* ===== ADMIN LOGIN SCREEN ===== */
-.login-screen {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  background: var(--bg2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  background-image:
-    radial-gradient(circle at 20% 80%, rgba(139,58,43,0.055) 0%, transparent 48%),
-    radial-gradient(circle at 80% 20%, rgba(111,127,106,0.06) 0%, transparent 48%);
-}
-.login-card {
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: var(--r3);
-  padding: 44px 40px 36px;
-  width: 100%;
-  max-width: 410px;
-  box-shadow: var(--sh3);
-  text-align: center;
-  animation: loginSlideIn .35s ease;
-}
-@keyframes loginSlideIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-.login-logo {
-  width: 68px;
-  height: 68px;
-  border-radius: var(--r2);
-  background: var(--bg3);
-  border: 2px dashed var(--card);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 24px;
-  color: var(--br);
-}
-.login-logo svg { display:block; }
-.login-title {
-  font-size: 22px;
-  font-weight: 700;
-  color: var(--br);
-  margin-bottom: 6px;
-  letter-spacing: -0.3px;
-}
-.login-subtitle {
-  font-size: 12.5px;
-  color: var(--t2);
-  margin-bottom: 32px;
-  line-height: 1.6;
-}
-.login-form {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  text-align: right;
-}
-.login-input {
-  width: 100%;
-  padding: 13px 16px;
-  font-family: var(--font);
-  font-size: 14px;
-  color: var(--t1);
-  background: var(--bg3);
-  border: 1.5px solid var(--border);
-  border-radius: var(--r1);
-  outline: none;
-  direction: rtl;
-  transition: border-color .2s, box-shadow .2s, background .2s;
-}
-.login-input::placeholder { color: var(--t2); }
-.login-input:focus {
-  border-color: var(--brl);
-  box-shadow: 0 0 0 3px rgba(139,58,43,.08);
-  background: var(--bg);
-}
-.login-button {
-  width: 100%;
-  padding: 14px;
-  font-family: var(--font);
-  font-size: 15px;
-  font-weight: 700;
-  color: #fff;
-  background: var(--br);
-  border: none;
-  border-radius: var(--r1);
-  cursor: pointer;
-  margin-top: 4px;
-  transition: background .2s, transform .1s;
-}
-.login-button:hover { background: var(--brh); }
-.login-button:active { transform: scale(.98); }
-.login-error {
-  font-size: 13px;
-  color: var(--red);
-  background: #FFEBEE;
-  border: 1px solid #FFCDD2;
-  border-radius: var(--r1);
-  padding: 10px 14px;
-  display: none;
-  text-align: center;
-}
-.login-error.visible { display:block; animation: shake .35s ease; }
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-6px); }
-  75% { transform: translateX(6px); }
-}
-.login-footer-text {
-  font-size: 11px;
-  color: var(--t2);
-  margin-top: 28px;
-  opacity: .75;
-}
-.logout-button {
-  padding: 9px 16px;
-  font-family: var(--font);
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--br);
-  background: var(--bg3);
-  border: 1.5px solid var(--border);
-  border-radius: 20px;
-  cursor: pointer;
-  transition: background .2s, border-color .2s, color .2s;
-  white-space: nowrap;
-}
-.logout-button:hover {
-  background: var(--br);
-  border-color: var(--br);
-  color: #fff;
+/* REPORT STATUS */
+.report-status-row{
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+  padding:12px 20px;background:var(--bg2);border-bottom:1px solid var(--border);
 }
 
-/* RESPONSIVE */
-@media(max-width:900px){.sidebar{display:none}.content{padding:20px 16px 50px}}
-@media(max-width:650px){.grid2,.grid3,.grid4{grid-template-columns:1fr}.span2,.span3{grid-column:span 1}.hdr{padding:0 16px}.summary-grid{grid-template-columns:1fr 1fr}}
+/* KPI PREVIEW */
+.kpi-preview-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px}
+.kpi-item{
+  background:var(--bg3);border-radius:8px;padding:14px;text-align:center;
+  border:1px solid var(--border);
+}
+.kpi-val{font-size:22px;font-weight:700;color:var(--br)}
+.kpi-lbl{font-size:11px;color:var(--t2);margin-top:4px;font-weight:500}
+
+/* PAGE HEADER */
+.page-header{
+  display:flex;align-items:flex-start;justify-content:space-between;
+  margin-bottom:24px;padding-bottom:16px;border-bottom:1px solid var(--border);
+}
+.page-title{font-size:20px;font-weight:700;color:var(--t1)}
+.page-sub{font-size:13px;color:var(--t2);margin-top:4px}
+
+@media(max-width:768px){
+  .topnav{padding:0 16px}
+  .main-tabs{padding:16px 16px 0;overflow-x:auto}
+  .content{padding:16px}
+  .grid-2,.grid-3,.grid-4,.metrics-row{grid-template-columns:1fr}
+  .kpi-preview-grid{grid-template-columns:1fr 1fr}
+}
 </style>
 </head>
 <body>
+<!-- LOADING OVERLAY -->
+<div class="loading-overlay" id="loadingOverlay"><div class="spinner"></div></div>
+<div id="toast"></div>
 
-<!-- ===== ADMIN LOGIN SCREEN ===== -->
-<div id="adminLoginScreen" class="login-screen">
-  <div class="login-card">
-    <div class="login-logo">
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-    </div>
-    <div class="login-title">تسجيل دخول الإدارة</div>
-    <div class="login-subtitle">لوحة إدخال البيانات — مطعم المزار الدمشقي</div>
-    <div class="login-form">
-      <input id="adminLoginUsername" class="login-input" type="text" placeholder="اسم المستخدم" autocomplete="username" />
-      <input id="adminLoginPassword" class="login-input" type="password" placeholder="كلمة المرور" autocomplete="current-password" />
-      <div id="adminLoginError" class="login-error">بيانات الدخول غير صحيحة</div>
-      <button class="login-button" onclick="handleAdminLogin()">دخول</button>
-    </div>
-    <div class="login-footer-text">خاص بفريق إدارة التسويق</div>
+<!-- TOP NAV -->
+<nav class="topnav">
+  <div class="nav-brand">
+    <img src="logo.png" alt="المزار">
+    <span>نظام إدارة التسويق — المزار الدمشقي</span>
   </div>
-</div>
-
-<!-- ===== ADMIN APP ===== -->
-<div id="adminApp" style="display:none">
-
-<!-- HEADER -->
-<header class="hdr">
-  <div class="hdr-logo">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+  <div class="nav-right">
+    <div class="status-badge"><div class="status-dot"></div><span id="connStatus">متصل</span></div>
   </div>
-  <div class="hdr-info">
-    <div class="hdr-title">لوحة إدخال البيانات — إدارة التسويق</div>
-    <div class="hdr-sub">مطعم المزار الدمشقي</div>
-  </div>
-  <div class="hdr-actions">
-    <span class="hdr-badge" id="saveStatusBadge">لم يتم الحفظ</span>
-    <button class="btn btn-primary" onclick="saveAll()">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-      حفظ البيانات
-    </button>
-    <button class="logout-button" onclick="handleAdminLogout()">تسجيل الخروج</button>
-  </div>
-</header>
-
-<div class="layout">
-
-<!-- SIDEBAR -->
-<nav class="sidebar">
-  <div class="sb-group-label">معلومات</div>
-  <button class="sb-btn active" onclick="showSection('report',this)">📋 بيانات التقرير</button>
-  <button class="sb-btn" onclick="showSection('sales',this)">💰 المبيعات</button>
-  <div class="sb-group-label">المحتوى</div>
-  <button class="sb-btn" onclick="showSection('content',this)">🎬 المحتوى</button>
-  <button class="sb-btn" onclick="showSection('tiktok',this)">🎵 تيك توك</button>
-  <button class="sb-btn" onclick="showSection('instagram',this)">📷 إنستغرام</button>
-  <div class="sb-group-label">قنوات</div>
-  <button class="sb-btn" onclick="showSection('gmaps',this)">📍 قوقل ماب</button>
-  <button class="sb-btn" onclick="showSection('delivery',this)">🛵 تطبيقات التوصيل</button>
-  <div class="sb-group-label">الحملات</div>
-  <button class="sb-btn" onclick="showSection('campaigns',this)">📣 الحملات <span class="sb-num" id="sb-campaigns">0</span></button>
-  <button class="sb-btn" onclick="showSection('influencers',this)">🌟 المعلنين <span class="sb-num" id="sb-influencers">0</span></button>
-  <div class="sb-group-label">تحليل</div>
-  <button class="sb-btn" onclick="showSection('achievements',this)">🏆 المنجزات <span class="sb-num" id="sb-achievements">0</span></button>
-  <button class="sb-btn" onclick="showSection('notes',this)">📝 الملاحظات</button>
-  <button class="sb-btn" onclick="showSection('plan',this)">🗓️ الخطة القادمة <span class="sb-num" id="sb-plan">0</span></button>
-  <div class="sb-group-label">إخراج</div>
-  <button class="sb-btn" onclick="showSection('summary',this)">✨ الملخص النهائي</button>
 </nav>
 
-<!-- CONTENT -->
+<!-- MAIN TABS -->
+<div class="main-tabs">
+  <button class="tab-btn active" onclick="switchTab('tasks')">📋 المهام</button>
+  <button class="tab-btn" onclick="switchTab('activity')">📊 النشاط اليومي</button>
+  <button class="tab-btn" onclick="switchTab('report')">📝 التقرير الأسبوعي</button>
+  <button class="tab-btn" onclick="switchTab('history')">🗂️ السجل</button>
+</div>
+
+<!-- ============================================================ -->
+<!-- TAB 1: TASKS -->
+<!-- ============================================================ -->
 <div class="content">
+<div class="tab-panel active" id="panel-tasks">
+  <div class="page-header">
+    <div>
+      <div class="page-title">إدارة المهام اليومية</div>
+      <div class="page-sub">تتبع وإدارة مهام الفريق بالكامل</div>
+    </div>
+    <button class="btn btn-primary" onclick="toggleAddTask()">＋ إضافة مهمة</button>
+  </div>
 
-<!-- ===== 1. REPORT INFO ===== -->
-<div class="section active" id="sec-report">
-  <div class="sec-hdr"><div class="sec-title">📋 بيانات التقرير</div><div class="sec-desc">المعلومات الأساسية للتقرير الأسبوعي</div></div>
-  <div class="card">
-    <div class="card-title"><div class="card-title-icon">📋</div>معلومات التقرير</div>
-    <div class="grid2">
-      <div class="field"><label>اسم العميل</label><input type="text" id="r_client" placeholder="مطعم المزار الدمشقي"></div>
-      <div class="field"><label>اسم التقرير</label><input type="text" id="r_name" placeholder="تقرير أبريل 2026"></div>
-      <div class="field"><label>الشهر</label><input type="text" id="r_month" placeholder="أبريل 2026"></div>
-      <div class="field"><label>رقم الأسبوع</label><input type="number" id="r_week" placeholder="4" min="1" max="5"></div>
-      <div class="field"><label>تاريخ بداية الفترة</label><input type="date" id="r_from"></div>
-      <div class="field"><label>تاريخ نهاية الفترة</label><input type="date" id="r_to"></div>
-      <div class="field"><label>حالة التقرير</label>
-        <select id="r_status">
-          <option value="مكتمل">مكتمل</option>
-          <option value="قيد التحديث" selected>قيد التحديث</option>
-          <option value="مسودة">مسودة</option>
-        </select>
+  <!-- ADD TASK FORM -->
+  <div class="section-card" id="addTaskCard" style="display:none;margin-bottom:20px">
+    <div class="section-head" onclick="toggleAddTask()">
+      <h3><span class="section-icon">＋</span> إضافة مهمة جديدة</h3>
+      <span class="toggle-arrow open">▼</span>
+    </div>
+    <div class="section-body">
+      <div class="grid-2">
+        <div class="field-group">
+          <label class="field-label">عنوان المهمة *</label>
+          <input type="text" class="field-input" id="taskTitle" placeholder="أدخل عنوان المهمة">
+        </div>
+        <div class="field-group">
+          <label class="field-label">نوع المهمة</label>
+          <select class="field-input" id="taskType">
+            <option value="content">محتوى</option>
+            <option value="engagement">تفاعل</option>
+            <option value="campaign">حملة</option>
+            <option value="gmaps">خرائط Google</option>
+            <option value="delivery">تطبيقات التوصيل</option>
+            <option value="sales">متابعة المبيعات</option>
+            <option value="other">أخرى</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label class="field-label">الأولوية</label>
+          <select class="field-input" id="taskPriority">
+            <option value="high">عالية 🔴</option>
+            <option value="medium" selected>متوسطة 🟡</option>
+            <option value="low">منخفضة 🟢</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label class="field-label">الحالة</label>
+          <select class="field-input" id="taskStatus">
+            <option value="pending">قيد الانتظار</option>
+            <option value="inprogress">قيد التنفيذ</option>
+            <option value="done">مكتملة</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label class="field-label">التاريخ</label>
+          <input type="date" class="field-input" id="taskDate">
+        </div>
       </div>
-    </div>
-    <div class="divider"></div>
-    <div class="field"><label>الملخص التنفيذي</label><textarea id="r_summary" rows="4" placeholder="اكتب الملخص التنفيذي القصير للفترة التسويقية..."></textarea></div>
-  </div>
-</div>
-
-<!-- ===== 2. SALES ===== -->
-<div class="section" id="sec-sales">
-  <div class="sec-hdr"><div class="sec-title">💰 المبيعات</div><div class="sec-desc">أدخل البيانات الخام لحساب نسب النمو تلقائياً</div></div>
-  <div class="card">
-    <div class="card-title"><div class="card-title-icon">📊</div>بيانات المبيعات الخام</div>
-    <div class="grid3">
-      <div class="field"><label>مبيعات الفترة السابقة (ريال)</label><input type="number" id="s_prev_sales" placeholder="572887" oninput="calcSales()"></div>
-      <div class="field"><label>مبيعات الفترة الحالية (ريال)</label><input type="number" id="s_curr_sales" placeholder="716424" oninput="calcSales()"></div>
-      <div></div>
-      <div class="field"><label>عدد فواتير الفترة السابقة</label><input type="number" id="s_prev_inv" placeholder="8182" oninput="calcSales()"></div>
-      <div class="field"><label>عدد فواتير الفترة الحالية</label><input type="number" id="s_curr_inv" placeholder="10107" oninput="calcSales()"></div>
-      <div></div>
-      <div class="field"><label>متوسط الفاتورة السابق (ريال)</label><input type="number" id="s_prev_avg" placeholder="70" oninput="calcSales()"></div>
-      <div class="field"><label>متوسط الفاتورة الحالي (ريال)</label><input type="number" id="s_curr_avg" placeholder="70" oninput="calcSales()"></div>
-    </div>
-    <div class="divider"></div>
-    <div class="calc-row">
-      <div class="calc-label">🔢 المؤشرات المحسوبة تلقائياً</div>
-      <div class="calc-grid">
-        <div class="calc-item"><div class="calc-item-label">نمو المبيعات %</div><div class="calc-item-val pos" id="c_sales_growth">—</div></div>
-        <div class="calc-item"><div class="calc-item-label">فرق المبيعات (ريال)</div><div class="calc-item-val pos" id="c_sales_diff">—</div></div>
-        <div class="calc-item"><div class="calc-item-label">نمو عدد الفواتير %</div><div class="calc-item-val pos" id="c_inv_growth">—</div></div>
-        <div class="calc-item"><div class="calc-item-label">فرق عدد الفواتير</div><div class="calc-item-val pos" id="c_inv_diff">—</div></div>
-        <div class="calc-item"><div class="calc-item-label">فرق متوسط الفاتورة</div><div class="calc-item-val" id="c_avg_diff">—</div></div>
+      <div class="field-group">
+        <label class="field-label">وصف المهمة</label>
+        <textarea class="field-input" id="taskDesc" placeholder="تفاصيل المهمة..." rows="3"></textarea>
       </div>
-    </div>
-  </div>
-</div>
-
-<!-- ===== 3. CONTENT ===== -->
-<div class="section" id="sec-content">
-  <div class="sec-hdr"><div class="sec-title">🎬 المحتوى</div><div class="sec-desc">الإنتاج الإجمالي للمحتوى خلال الفترة</div></div>
-  <div class="card">
-    <div class="card-title"><div class="card-title-icon">🎬</div>بيانات الإنتاج</div>
-    <div class="grid3">
-      <div class="field"><label>فيديوهات عضوية</label><input type="number" id="co_organic" placeholder="36" oninput="calcContent()"></div>
-      <div class="field"><label>فيديوهات معلنين</label><input type="number" id="co_adv" placeholder="35" oninput="calcContent()"></div>
-      <div class="field"><label>منشورات إنستغرام</label><input type="number" id="co_ig_posts" placeholder="18" oninput="calcContent()"></div>
-      <div class="field"><label>ستوري إنستغرام</label><input type="number" id="co_ig_stories" placeholder="204" oninput="calcContent()"></div>
-      <div class="field"><label>تصاميم بصرية</label><input type="number" id="co_designs" placeholder="25" oninput="calcContent()"></div>
-      <div class="field"><label>جلسات تصوير</label><input type="number" id="co_shoots" placeholder="4" oninput="calcContent()"></div>
-      <div class="field"><label>إعادة نشر UGC</label><input type="number" id="co_ugc" placeholder="12" oninput="calcContent()"></div>
-    </div>
-    <div class="divider"></div>
-    <div class="calc-row">
-      <div class="calc-label">🔢 المجاميع المحسوبة</div>
-      <div class="calc-grid">
-        <div class="calc-item"><div class="calc-item-label">إجمالي الفيديوهات</div><div class="calc-item-val br" id="c_total_videos">—</div></div>
-        <div class="calc-item"><div class="calc-item-label">إجمالي المواد المنشورة</div><div class="calc-item-val br" id="c_total_published">—</div></div>
-        <div class="calc-item"><div class="calc-item-label">إجمالي الإنتاج البصري</div><div class="calc-item-val br" id="c_total_visual">—</div></div>
-      </div>
-    </div>
-  </div>
-  <div class="card">
-    <div class="card-title"><div class="card-title-icon">🏆</div>أفضل فيديو في الفترة</div>
-    <div class="grid3">
-      <div class="field"><label>عنوان الفيديو</label><input type="text" id="co_best_title" placeholder="تجربة سارة"></div>
-      <div class="field"><label>المشاهدات</label><input type="number" id="co_best_views" placeholder="168000"></div>
-      <div class="field"><label>الإعجابات</label><input type="number" id="co_best_likes" placeholder="986"></div>
-      <div class="field span2"><label>ملاحظة</label><input type="text" id="co_best_note" placeholder="ما جعل هذا الفيديو يتفوق..."></div>
-    </div>
-  </div>
-</div>
-
-<!-- ===== 4. TIKTOK ===== -->
-<div class="section" id="sec-tiktok">
-  <div class="sec-hdr"><div class="sec-title">🎵 تيك توك</div><div class="sec-desc">بيانات الأداء المقارنة مع الفترة السابقة</div></div>
-  <div class="card">
-    <div class="card-title"><div class="card-title-icon">📊</div>المؤشرات المقارنة</div>
-    <div class="grid3">
-      <div></div>
-      <div style="font-size:11px;font-weight:700;color:var(--t2);text-align:center;padding-bottom:4px">الفترة السابقة</div>
-      <div style="font-size:11px;font-weight:700;color:var(--br);text-align:center;padding-bottom:4px">الفترة الحالية</div>
-
-      <div style="font-size:12px;font-weight:600;display:flex;align-items:center">مشاهدات المحتوى</div>
-      <div class="field"><input type="number" id="tt_prev_views" placeholder="58000" oninput="calcTiktok()"></div>
-      <div class="field"><input type="number" id="tt_curr_views" placeholder="567000" oninput="calcTiktok()"></div>
-
-      <div style="font-size:12px;font-weight:600;display:flex;align-items:center">مشاهدات الحساب</div>
-      <div class="field"><input type="number" id="tt_prev_acc" placeholder="2744" oninput="calcTiktok()"></div>
-      <div class="field"><input type="number" id="tt_curr_acc" placeholder="21000" oninput="calcTiktok()"></div>
-
-      <div style="font-size:12px;font-weight:600;display:flex;align-items:center">الإعجابات</div>
-      <div class="field"><input type="number" id="tt_prev_likes" placeholder="874" oninput="calcTiktok()"></div>
-      <div class="field"><input type="number" id="tt_curr_likes" placeholder="7553" oninput="calcTiktok()"></div>
-
-      <div style="font-size:12px;font-weight:600;display:flex;align-items:center">التعليقات</div>
-      <div class="field"><input type="number" id="tt_prev_comments" placeholder="80" oninput="calcTiktok()"></div>
-      <div class="field"><input type="number" id="tt_curr_comments" placeholder="549" oninput="calcTiktok()"></div>
-
-      <div style="font-size:12px;font-weight:600;display:flex;align-items:center">المشاركات</div>
-      <div class="field"><input type="number" id="tt_prev_shares" placeholder="462" oninput="calcTiktok()"></div>
-      <div class="field"><input type="number" id="tt_curr_shares" placeholder="6419" oninput="calcTiktok()"></div>
-    </div>
-    <div class="divider"></div>
-    <div class="grid3">
-      <div class="field"><label>فيديوهات منشورة</label><input type="number" id="tt_videos" placeholder="0"></div>
-      <div class="field"><label>تعليقات تم الرد عليها</label><input type="number" id="tt_replied" placeholder="0"></div>
-      <div class="field"><label>محادثات مفتوحة</label><input type="number" id="tt_msgs" placeholder="0"></div>
-    </div>
-    <div class="divider"></div>
-    <div class="calc-row">
-      <div class="calc-label">🔢 النتائج المحسوبة</div>
-      <div class="calc-grid" id="tt_calcs"></div>
-    </div>
-  </div>
-</div>
-
-<!-- ===== 5. INSTAGRAM ===== -->
-<div class="section" id="sec-instagram">
-  <div class="sec-hdr"><div class="sec-title">📷 إنستغرام</div><div class="sec-desc">بيانات الأداء على منصة إنستغرام</div></div>
-  <div class="card">
-    <div class="card-title"><div class="card-title-icon">📷</div>الأداء الشهري / الأسبوعي</div>
-    <div class="grid3">
-      <div class="field"><label>المشاهدات</label><input type="number" id="ig_views" placeholder="69432"></div>
-      <div class="field"><label>الوصول</label><input type="number" id="ig_reach" placeholder="2867"></div>
-      <div class="field"><label>التفاعل</label><input type="number" id="ig_engage" placeholder="1599"></div>
-      <div class="field"><label>نمو الحساب %</label><input type="number" id="ig_growth" placeholder="29.5" step="0.1"></div>
-      <div class="field"><label>عدد الريلز</label><input type="number" id="ig_reels" placeholder="0"></div>
-      <div class="field"><label>عدد البوستات</label><input type="number" id="ig_posts" placeholder="18"></div>
-      <div class="field"><label>عدد الستوري</label><input type="number" id="ig_stories" placeholder="204"></div>
-      <div class="field"><label>تعليقات تم الرد عليها</label><input type="number" id="ig_replied_comments" placeholder="0"></div>
-      <div class="field"><label>رسائل خاصة تم الرد عليها</label><input type="number" id="ig_replied_dms" placeholder="0"></div>
-      <div class="field"><label>إعادة نشر من العملاء</label><input type="number" id="ig_reposts" placeholder="0"></div>
-      <div class="field"><label>محادثات مفتوحة</label><input type="number" id="ig_open_convs" placeholder="0"></div>
-    </div>
-  </div>
-</div>
-
-<!-- ===== 6. GOOGLE MAPS ===== -->
-<div class="section" id="sec-gmaps">
-  <div class="sec-hdr"><div class="sec-title">📍 قوقل ماب</div><div class="sec-desc">البيانات الشهرية + متابعة التقييمات الأسبوعية</div></div>
-  <div class="card">
-    <div class="card-title"><div class="card-title-icon">📊</div>الأداء الشهري</div>
-    <div class="grid3">
-      <div class="field"><label>مشاهدات الملف</label><input type="number" id="gm_profile_views" placeholder="42521"></div>
-      <div class="field"><label>عمليات البحث</label><input type="number" id="gm_searches" placeholder="13778" oninput="calcGmaps()"></div>
-      <div class="field"><label>المكالمات</label><input type="number" id="gm_calls" placeholder="3513" oninput="calcGmaps()"></div>
-      <div class="field"><label>طلبات الاتجاهات</label><input type="number" id="gm_directions" placeholder="4025" oninput="calcGmaps()"></div>
-      <div class="field"><label>دخول المنيو</label><input type="number" id="gm_menu" placeholder="5801" oninput="calcGmaps()"></div>
-    </div>
-  </div>
-  <div class="card">
-    <div class="card-title"><div class="card-title-icon">⭐</div>توزيع التقييمات</div>
-    <div class="grid3">
-      <div class="field"><label>تقييمات 5 نجوم ⭐⭐⭐⭐⭐</label><input type="number" id="gm_r5" placeholder="0" oninput="calcGmaps()"></div>
-      <div class="field"><label>تقييمات 4 نجوم ⭐⭐⭐⭐</label><input type="number" id="gm_r4" placeholder="0" oninput="calcGmaps()"></div>
-      <div class="field"><label>تقييمات 3 نجوم ⭐⭐⭐</label><input type="number" id="gm_r3" placeholder="0" oninput="calcGmaps()"></div>
-      <div class="field"><label>تقييمات 2 نجمة ⭐⭐</label><input type="number" id="gm_r2" placeholder="0" oninput="calcGmaps()"></div>
-      <div class="field"><label>تقييمات 1 نجمة ⭐</label><input type="number" id="gm_r1" placeholder="0" oninput="calcGmaps()"></div>
-      <div class="field"><label>عدد الردود على التقييمات</label><input type="number" id="gm_replies" placeholder="0" oninput="calcGmaps()"></div>
-    </div>
-    <div class="divider"></div>
-    <div class="calc-row">
-      <div class="calc-label">🔢 المحسوبة تلقائياً</div>
-      <div class="calc-grid">
-        <div class="calc-item"><div class="calc-item-label">إجمالي التقييمات الجديدة</div><div class="calc-item-val br" id="c_gm_total_reviews">—</div></div>
-        <div class="calc-item"><div class="calc-item-label">إجمالي تفاعل قوقل ماب</div><div class="calc-item-val br" id="c_gm_interact">—</div></div>
-        <div class="calc-item"><div class="calc-item-label">نسبة الرد %</div><div class="calc-item-val pos" id="c_gm_reply_rate">—</div></div>
-        <div class="calc-item"><div class="calc-item-label">متوسط التقييم</div><div class="calc-item-val pos" id="c_gm_avg_rating">—</div></div>
-      </div>
-    </div>
-  </div>
-  <div class="card">
-    <div class="card-title"><div class="card-title-icon">💬</div>ملاحظات العملاء</div>
-    <div class="grid2">
-      <div class="field"><label>أبرز ملاحظات العملاء</label><textarea id="gm_notes" rows="3" placeholder="ما يقوله العملاء في التقييمات..."></textarea></div>
-      <div class="field"><label>أكثر كلمة تكررت في التقييمات</label><input type="text" id="gm_top_word" placeholder="مثال: مشاوي، خدمة، جو..."></div>
-    </div>
-  </div>
-</div>
-
-<!-- ===== 7. CAMPAIGNS ===== -->
-<div class="section" id="sec-campaigns">
-  <div class="sec-hdr"><div class="sec-title">📣 الحملات</div><div class="sec-desc">أضف كل حملة بشكل منفصل</div></div>
-  <div id="campaigns-container"></div>
-  <button class="btn-add" onclick="addCampaign()">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
-    إضافة حملة
-  </button>
-  <div class="calc-row" style="margin-top:16px">
-    <div class="calc-label">🔢 إجماليات الحملات</div>
-    <div class="calc-grid">
-      <div class="calc-item"><div class="calc-item-label">عدد الحملات</div><div class="calc-item-val br" id="c_camp_count">0</div></div>
-      <div class="calc-item"><div class="calc-item-label">إجمالي المشاهدات</div><div class="calc-item-val br" id="c_camp_views">0</div></div>
-      <div class="calc-item"><div class="calc-item-label">إجمالي التفاعل</div><div class="calc-item-val br" id="c_camp_engage">0</div></div>
-      <div class="calc-item"><div class="calc-item-label">إجمالي الزيارات</div><div class="calc-item-val br" id="c_camp_visits">0</div></div>
-      <div class="calc-item"><div class="calc-item-label">أعلى حملة مشاهدة</div><div class="calc-item-val pos" id="c_camp_top">—</div></div>
-    </div>
-  </div>
-</div>
-
-<!-- ===== 8. INFLUENCERS ===== -->
-<div class="section" id="sec-influencers">
-  <div class="sec-hdr"><div class="sec-title">🌟 المعلنين</div><div class="sec-desc">سجّل بيانات كل معلن بشكل منفصل</div></div>
-  <div id="influencers-container"></div>
-  <button class="btn-add" onclick="addInfluencer()">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
-    إضافة معلن
-  </button>
-  <div class="calc-row" style="margin-top:16px">
-    <div class="calc-label">🔢 إجماليات المعلنين</div>
-    <div class="calc-grid">
-      <div class="calc-item"><div class="calc-item-label">عدد المعلنين</div><div class="calc-item-val br" id="c_inf_total">0</div></div>
-      <div class="calc-item"><div class="calc-item-label">عدد الحاضرين</div><div class="calc-item-val pos" id="c_inf_attended">0</div></div>
-      <div class="calc-item"><div class="calc-item-label">عدد المنسق معهم</div><div class="calc-item-val br" id="c_inf_coordinated">0</div></div>
-      <div class="calc-item"><div class="calc-item-label">أفضل معلن (مشاهدات)</div><div class="calc-item-val pos" id="c_inf_best">—</div></div>
-      <div class="calc-item"><div class="calc-item-label">إجمالي التكلفة (ريال)</div><div class="calc-item-val" id="c_inf_cost">0</div></div>
-    </div>
-  </div>
-</div>
-
-<!-- ===== 9. DELIVERY ===== -->
-<div class="section" id="sec-delivery">
-  <div class="sec-hdr"><div class="sec-title">🛵 تطبيقات التوصيل</div><div class="sec-desc">HungerStation و Keeta</div></div>
-
-  <div class="ptabs">
-    <button class="ptab-btn active" onclick="showPtab('hunger',this)">🟠 HungerStation</button>
-    <button class="ptab-btn" onclick="showPtab('keeta',this)">🟢 Keeta</button>
-  </div>
-
-  <div class="ptab-pane active" id="ptab-hunger">
-    <div class="card">
-      <div class="card-title"><div class="card-title-icon">🟠</div>HungerStation</div>
-      <div class="grid2">
-        <div class="field"><label>صور تم تحديثها</label><input type="number" id="hs_photos" placeholder="0"></div>
-        <div class="field"><label>أسماء تم تعديلها</label><input type="number" id="hs_names" placeholder="0"></div>
-        <div class="field"><label>أوصاف تم تعديلها</label><input type="number" id="hs_descs" placeholder="0"></div>
-        <div class="field"><label>منتجات قديمة محذوفة</label><input type="number" id="hs_deleted" placeholder="0"></div>
-        <div class="field"><label>المنتجات الأعلى طلباً</label><input type="text" id="hs_top" placeholder="مثال: شاورما دجاج، طاجن لحم..."></div>
-        <div class="field"><label>المنتجات الأقل طلباً</label><input type="text" id="hs_low" placeholder="مثال: صحن متبل..."></div>
-        <div class="field span2"><label>أبرز ملاحظات العملاء</label><textarea id="hs_notes" rows="2"></textarea></div>
-        <div class="field span2"><label>ملاحظات تحسين المنيو</label><textarea id="hs_menu_notes" rows="2"></textarea></div>
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-primary" onclick="saveTask()">💾 حفظ المهمة</button>
+        <button class="btn btn-outline" onclick="toggleAddTask()">إلغاء</button>
       </div>
     </div>
   </div>
 
-  <div class="ptab-pane" id="ptab-keeta">
-    <div class="card">
-      <div class="card-title"><div class="card-title-icon">🟢</div>Keeta</div>
-      <div class="grid2">
-        <div class="field"><label>صور تم تحديثها</label><input type="number" id="kt_photos" placeholder="0"></div>
-        <div class="field"><label>أسماء تم تعديلها</label><input type="number" id="kt_names" placeholder="0"></div>
-        <div class="field"><label>أوصاف تم تعديلها</label><input type="number" id="kt_descs" placeholder="0"></div>
-        <div class="field"><label>منتجات قديمة محذوفة</label><input type="number" id="kt_deleted" placeholder="0"></div>
-        <div class="field"><label>المنتجات الأعلى طلباً</label><input type="text" id="kt_top" placeholder="مثال: فتة دجاج..."></div>
-        <div class="field"><label>المنتجات الأقل طلباً</label><input type="text" id="kt_low" placeholder="..."></div>
-        <div class="field span2"><label>أبرز ملاحظات العملاء</label><textarea id="kt_notes" rows="2"></textarea></div>
-        <div class="field span2"><label>ملاحظات تحسين المنيو</label><textarea id="kt_menu_notes" rows="2"></textarea></div>
+  <!-- TASK FILTERS -->
+  <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">
+    <button class="btn btn-sm btn-outline" onclick="filterTasks('all')" id="filter-all" style="border-color:var(--br);color:var(--br)">الكل</button>
+    <button class="btn btn-sm btn-outline" onclick="filterTasks('pending')" id="filter-pending">⏳ انتظار</button>
+    <button class="btn btn-sm btn-outline" onclick="filterTasks('inprogress')" id="filter-inprogress">🔄 جاري</button>
+    <button class="btn btn-sm btn-outline" onclick="filterTasks('done')" id="filter-done">✅ مكتمل</button>
+  </div>
+
+  <!-- TASK STATS -->
+  <div class="metrics-row" id="taskStats">
+    <div class="metric-box"><div class="metric-val" id="stat-total">0</div><div class="metric-label">إجمالي المهام</div></div>
+    <div class="metric-box"><div class="metric-val" id="stat-pending" style="color:var(--amber)">0</div><div class="metric-label">قيد الانتظار</div></div>
+    <div class="metric-box"><div class="metric-val" id="stat-inprogress" style="color:var(--blue)">0</div><div class="metric-label">قيد التنفيذ</div></div>
+    <div class="metric-box"><div class="metric-val" id="stat-done" style="color:var(--green)">0</div><div class="metric-label">مكتملة</div></div>
+  </div>
+
+  <!-- TASK LIST -->
+  <div class="task-list" id="taskList">
+    <div class="empty-state">
+      <div class="empty-icon">📋</div>
+      <div class="empty-text">لا توجد مهام بعد</div>
+      <div class="empty-sub">ابدأ بإضافة مهمة جديدة</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- TAB 2: DAILY ACTIVITY -->
+<!-- ============================================================ -->
+<div class="tab-panel" id="panel-activity">
+  <div class="page-header">
+    <div>
+      <div class="page-title">تتبع النشاط اليومي</div>
+      <div class="page-sub">سجل نشاط الفريق اليومي بدقة</div>
+    </div>
+    <button class="btn btn-success" onclick="saveActivity()">💾 حفظ النشاط</button>
+  </div>
+
+  <!-- DATE SELECTOR -->
+  <div class="week-selector">
+    <label>تاريخ النشاط:</label>
+    <input type="date" class="field-input" id="activityDate" style="max-width:200px">
+  </div>
+
+  <!-- CONTENT METRICS -->
+  <div class="section-card">
+    <div class="section-head" onclick="toggleSection(this)">
+      <h3><span class="section-icon">📸</span> إنتاج المحتوى</h3>
+      <span class="toggle-arrow open">▼</span>
+    </div>
+    <div class="section-body">
+      <div class="grid-4">
+        <div class="field-group">
+          <label class="field-label">بوستات نُشرت</label>
+          <div class="number-input-wrap">
+            <div class="num-ctrl">
+              <button class="num-btn" onclick="numChange('posts',1)">▲</button>
+              <button class="num-btn" onclick="numChange('posts',-1)">▼</button>
+            </div>
+            <input type="number" class="field-input num-field" id="act-posts" value="0" min="0">
+          </div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">ستوريات</label>
+          <div class="number-input-wrap">
+            <div class="num-ctrl">
+              <button class="num-btn" onclick="numChange('stories',1)">▲</button>
+              <button class="num-btn" onclick="numChange('stories',-1)">▼</button>
+            </div>
+            <input type="number" class="field-input num-field" id="act-stories" value="0" min="0">
+          </div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">فيديوهات</label>
+          <div class="number-input-wrap">
+            <div class="num-ctrl">
+              <button class="num-btn" onclick="numChange('videos',1)">▲</button>
+              <button class="num-btn" onclick="numChange('videos',-1)">▼</button>
+            </div>
+            <input type="number" class="field-input num-field" id="act-videos" value="0" min="0">
+          </div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">ريلز</label>
+          <div class="number-input-wrap">
+            <div class="num-ctrl">
+              <button class="num-btn" onclick="numChange('reels',1)">▲</button>
+              <button class="num-btn" onclick="numChange('reels',-1)">▼</button>
+            </div>
+            <input type="number" class="field-input num-field" id="act-reels" value="0" min="0">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ENGAGEMENT METRICS -->
+  <div class="section-card">
+    <div class="section-head" onclick="toggleSection(this)">
+      <h3><span class="section-icon">💬</span> التفاعل والمتابعة</h3>
+      <span class="toggle-arrow open">▼</span>
+    </div>
+    <div class="section-body">
+      <div class="grid-4">
+        <div class="field-group">
+          <label class="field-label">تعليقات رُد عليها</label>
+          <div class="number-input-wrap">
+            <div class="num-ctrl">
+              <button class="num-btn" onclick="numChange('comments',1)">▲</button>
+              <button class="num-btn" onclick="numChange('comments',-1)">▼</button>
+            </div>
+            <input type="number" class="field-input num-field" id="act-comments" value="0" min="0">
+          </div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">رسائل رُد عليها</label>
+          <div class="number-input-wrap">
+            <div class="num-ctrl">
+              <button class="num-btn" onclick="numChange('messages',1)">▲</button>
+              <button class="num-btn" onclick="numChange('messages',-1)">▼</button>
+            </div>
+            <input type="number" class="field-input num-field" id="act-messages" value="0" min="0">
+          </div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">محادثات فُتحت</label>
+          <div class="number-input-wrap">
+            <div class="num-ctrl">
+              <button class="num-btn" onclick="numChange('conversations',1)">▲</button>
+              <button class="num-btn" onclick="numChange('conversations',-1)">▼</button>
+            </div>
+            <input type="number" class="field-input num-field" id="act-conversations" value="0" min="0">
+          </div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">مؤثرون تواصلنا</label>
+          <div class="number-input-wrap">
+            <div class="num-ctrl">
+              <button class="num-btn" onclick="numChange('influencers',1)">▲</button>
+              <button class="num-btn" onclick="numChange('influencers',-1)">▼</button>
+            </div>
+            <input type="number" class="field-input num-field" id="act-influencers" value="0" min="0">
+          </div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">مؤثرون زيارة</label>
+          <div class="number-input-wrap">
+            <div class="num-ctrl">
+              <button class="num-btn" onclick="numChange('influVisits',1)">▲</button>
+              <button class="num-btn" onclick="numChange('influVisits',-1)">▼</button>
+            </div>
+            <input type="number" class="field-input num-field" id="act-influVisits" value="0" min="0">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ACTIVITY LOG -->
+  <div class="section-card">
+    <div class="section-head">
+      <h3><span class="section-icon">📅</span> سجل النشاط</h3>
+    </div>
+    <div class="section-body">
+      <div id="activityLog">
+        <div class="empty-state">
+          <div class="empty-icon">📊</div>
+          <div class="empty-text">لا يوجد نشاط مسجل بعد</div>
+        </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ===== 10. ACHIEVEMENTS ===== -->
-<div class="section" id="sec-achievements">
-  <div class="sec-hdr"><div class="sec-title">🏆 المنجزات</div><div class="sec-desc">سجّل أبرز ما تحقق خلال الفترة</div></div>
-  <div id="achievements-container"></div>
-  <button class="btn-add" onclick="addAchievement()">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
-    إضافة منجز
-  </button>
+<!-- ============================================================ -->
+<!-- TAB 3: WEEKLY REPORT -->
+<!-- ============================================================ -->
+<div class="tab-panel" id="panel-report">
+  <div class="page-header">
+    <div>
+      <div class="page-title">بناء التقرير الأسبوعي</div>
+      <div class="page-sub">أدخل بيانات الأسبوع ثم اضغط حفظ</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-outline" onclick="saveDraft()">⏾ حفظ مسودة</button>
+      <button class="btn btn-success" onclick="publishReport()">🚀 نشر للعميل</button>
+    </div>
+  </div>
+
+  <!-- WEEK & MONTH SELECTOR -->
+  <div class="week-selector">
+    <label>الشهر:</label>
+    <select class="field-input" id="rep-month" style="max-width:150px">
+      <option value="1">يناير</option><option value="2">فبراير</option>
+      <option value="3">مارس</option><option value="4">أبريل</option>
+      <option value="5">مايو</option><option value="6">يونيو</option>
+      <option value="7">يوليو</option><option value="8">أغسطس</option>
+      <option value="9">سبتمبر</option><option value="10">أكتوبر</option>
+      <option value="11">نوفمبر</option><option value="12">ديسمبر</option>
+    </select>
+    <label>الأسبوع:</label>
+    <select class="field-input" id="rep-week" style="max-width:120px">
+      <option value="1">الأسبوع 1</option>
+      <option value="2">الأسبوع 2</option>
+      <option value="3">الأسبوع 3</option>
+      <option value="4">الأسبوع 4</option>
+    </select>
+    <label>الحالة:</label>
+    <span id="repStatusBadge" class="status-badge" style="font-size:12px">مسودة</span>
+  </div>
+
+  <!-- SALES PERFORMANCE -->
+  <div class="section-card">
+    <div class="section-head" onclick="toggleSection(this)">
+      <h3><span class="section-icon">💰</span> أداء المبيعات</h3>
+      <span class="toggle-arrow open">▼</span>
+    </div>
+    <div class="section-body">
+      <div class="grid-3">
+        <div class="field-group"><label class="field-label">إجمالي المبيعات (الأسبوع)</label><input type="number" class="field-input" id="r-sales-total" placeholder="0"></div>
+        <div class="field-group"><label class="field-label">مبيعات الأسبوع السابق</label><input type="number" class="field-input" id="r-sales-prev" placeholder="0"></div>
+        <div class="field-group"><label class="field-label">عدد الطلبات</label><input type="number" class="field-input" id="r-orders" placeholder="0"></div>
+        <div class="field-group"><label class="field-label">متوسط قيمة الطلب</label><input type="number" class="field-input" id="r-avg-order" placeholder="0"></div>
+        <div class="field-group"><label class="field-label">أفضل منتج مبيعاً</label><input type="text" class="field-input" id="r-top-product" placeholder="اسم المنتج"></div>
+        <div class="field-group"><label class="field-label">هدف المبيعات</label><input type="number" class="field-input" id="r-sales-target" placeholder="0"></div>
+      </div>
+      <div class="field-group"><label class="field-label">ملاحظات المبيعات</label><textarea class="field-input" id="r-sales-notes" rows="2" placeholder="أبرز ملاحظات الأداء..."></textarea></div>
+    </div>
+  </div>
+
+  <!-- CONTENT PRODUCTION -->
+  <div class="section-card">
+    <div class="section-head" onclick="toggleSection(this)">
+      <h3><span class="section-icon">📸</span> إنتاج المحتوى</h3>
+      <span class="toggle-arrow open">▼</span>
+    </div>
+    <div class="section-body">
+      <div class="grid-4">
+        <div class="field-group"><label class="field-label">بوستات</label><input type="number" class="field-input" id="r-posts" placeholder="0"></div>
+        <div class="field-group"><label class="field-label">ستوريات</label><input type="number" class="field-input" id="r-stories" placeholder="0"></div>
+        <div class="field-group"><label class="field-label">فيديوهات</label><input type="number" class="field-input" id="r-videos" placeholder="0"></div>
+        <div class="field-group"><label class="field-label">ريلز</label><input type="number" class="field-input" id="r-reels" placeholder="0"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TIKTOK -->
+  <div class="section-card">
+    <div class="section-head" onclick="toggleSection(this)">
+      <h3><span class="section-icon">🎵</span> أداء تيك توك</h3>
+      <span class="toggle-arrow open">▼</span>
+    </div>
+    <div class="section-body">
+      <div class="grid-4">
+        <div class="field-group"><label class="field-label">مشاهدات</label><input type="number" class="field-input" id="r-tt-views" placeholder="0"></div>
+        <div class="field-group"><label class="field-label">متابعون جدد</label><input type="number" class="field-input" id="r-tt-followers" placeholder="0"></div>
+        <div class="field-group"><label class="field-label">إجمالي الإعجابات</label><input type="number" class="field-input" id="r-tt-likes" placeholder="0"></div>
+        <div class="field-group"><label class="field-label">تعليقات</label><input type="number" class="field-input" id="r-tt-comments" placeholder="0"></div>
+        <div class="field-group"><label class="field-label">مشاركات</label><input type="number" class="field-input" id="r-tt-shares" placeholder="0"></div>
+        <div class="field-group"><label class="field-label">أفضل فيديو (مشاهدات)</label><input type="number" class="field-input" id="r-tt-top" placeholder="0"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INSTAGRAM -->
+  <div class="section-card">
+    <div class="section-head" onclick="toggleSection(this)">
+      <h3><span class="section-icon">📷</span> أداء إنستاغرام</h3>
+      <span class="toggle-arrow open">▼</span>
+    </div>
+    <div class="section-body">
+      <div class="grid-4">
+        <div class="field-group"><label class="field-label">وصول (Reach)</label><input type="number" class="field-input" id="r-ig-reach" placeholder="0"></div>
+        <div class="field-group"><label class="field-label">مشاهدات</label><input type="number" class="field-input" id="r-ig-impressions" placeholder="0"></div>
+        <div class="field-group"><label class="field-label">متابعون جدد</label><input type="number" class="field-input" id="r-ig-followers" placeholder="0"></div>
+        <div class="field-group"><label class="field-label">نسبة التفاعل %</label><input type="number" class="field-input" id="r-ig-engagement" placeholder="0.0" step="0.1"></div>
+        <div class="field-group"><label class="field-label">تفاعل الريلز</label><input type="number" class="field-input" id="r-ig-reels-eng" placeholder="0"></div>
+        <div class="field-group"><label class="field-label">مشاهدات الستوري</label><input type="number" class="field-input" id="r-ig-story-views" placeholder="0"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GOOGLE MAPS -->
+  <div class="section-card">
+    <div class="section-head" onclick="toggleSection(this)">
+      <h3><span class="section-icon">📍</span> خرائط Google</h3>
+      <span class="toggle-arrow open">▼</span>
+    </div>
+    <div class="section-body">
+      <div class="grid-4">
+        <div class="field-group"><label class="field-label">مشاهدات الملف</label><input type="number" class="field-input" id="r-gm-views" placeholder="0"></div>
+        <div class="field-group"><label class="field-label">بحث مباشر</label><input type="number" class="field-input" id="r-gm-direct" placeholder="0"></div>
+        <div class="field-group"><label class="field-label">بحث اكتشاف</label><input type="number" class="field-input" id="r-gm-discovery" placeholder="0"></div>
+        <div class="field-group"><label class="field-label">مكالمات</label><input type="number" class="field-input" id="r-gm-calls" placeholder="0"></div>
+        <div class="field-group"><label class="field-label">تعليقات جديدة</label><input type="number" class="field-input" id="r-gm-reviews" placeholder="0"></div>
+        <div class="field-group"><label class="field-label">متوسط التقييم</label><input type="number" class="field-input" id="r-gm-rating" placeholder="0.0" step="0.1" max="5"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CAMPAIGNS -->
+  <div class="section-card">
+    <div class="section-head" onclick="toggleSection(this)">
+      <h3><span class="section-icon">🎯</span> الحملات الإعلانية</h3>
+      <span class="toggle-arrow open">▼</span>
+    </div>
+    <div class="section-body">
+      <div class="grid-4">
+        <div class="field-group"><label class="field-label">إجمالي الإنفاق</label><input type="number" class="field-input" id="r-camp-spend" placeholder="0"></div>
+        <div class="field-group"><label class="field-label">وصول الحملات</label><input type="number" class="field-input" id="r-camp-reach" placeholder="0"></div>
+        <div class="field-group"><label class="field-label">نقرات</label><input type="number" class="field-input" id="r-camp-clicks" placeholder="0"></div>
+        <div class="field-group"><label class="field-label">تحويلات</label><input type="number" class="field-input" id="r-camp-conv" placeholder="0"></div>
+      </div>
+      <div class="field-group"><label class="field-label">ملاحظات الحملة</label><textarea class="field-input" id="r-camp-notes" rows="2" placeholder="أبرز نتائج الحملة..."></textarea></div>
+    </div>
+  </div>
+
+  <!-- INFLUENCERS -->
+  <div class="section-card">
+    <div class="section-head" onclick="toggleSection(this)">
+      <h3><span class="section-icon">⭐</span> المؤثرون</h3>
+      <span class="toggle-arrow open">▼</span>
+    </div>
+    <div class="section-body">
+      <div class="grid-3">
+        <div class="field-group"><label class="field-label">مؤثرون تم التواصل</label><input type="number" class="field-input" id="r-inf-contacted" placeholder="0"></div>
+        <div class="field-group"><label class="field-label">زيارات تمت</label><input type="number" class="field-input" id="r-inf-visited" placeholder="0"></div>
+        <div class="field-group"><label class="field-label">محتوى نُشر</label><input type="number" class="field-input" id="r-inf-posts" placeholder="0"></div>
+        <div class="field-group"><label class="field-label">وصول المحتوى</label><input type="number" class="field-input" id="r-inf-reach" placeholder="0"></div>
+      </div>
+      <div class="field-group"><label class="field-label">تفاصيل المؤثرين</label><textarea class="field-input" id="r-inf-notes" rows="3" placeholder="أسماء المؤثرين ونوع المحتوى..."></textarea></div>
+    </div>
+  </div>
+
+  <!-- DELIVERY APPS -->
+  <div class="section-card">
+    <div class="section-head" onclick="toggleSection(this)">
+      <h3><span class="section-icon">🛵</span> تطبيقات التوصيل</h3>
+      <span class="toggle-arrow open">▼</span>
+    </div>
+    <div class="section-body">
+      <div class="grid-3">
+        <div class="field-group"><label class="field-label">طلبات التوصيل</label><input type="number" class="field-input" id="r-del-orders" placeholder="0"></div>
+        <div class="field-group"><label class="field-label">تقييم التوصيل</label><input type="number" class="field-input" id="r-del-rating" placeholder="0.0" step="0.1" max="5"></div>
+        <div class="field-group"><label class="field-label">نسبة النمو %</label><input type="number" class="field-input" id="r-del-growth" placeholder="0" step="0.1"></div>
+      </div>
+      <div class="field-group"><label class="field-label">ملاحظات</label><textarea class="field-input" id="r-del-notes" rows="2" placeholder="تحديثات تطبيقات التوصيل..."></textarea></div>
+    </div>
+  </div>
+
+  <!-- ACHIEVEMENTS, NOTES, PLAN -->
+  <div class="section-card">
+    <div class="section-head" onclick="toggleSection(this)">
+      <h3><span class="section-icon">🏆</span> الإنجازات والملاحظات والخطة</h3>
+      <span class="toggle-arrow open">▼</span>
+    </div>
+    <div class="section-body">
+      <div class="field-group">
+        <label class="field-label">🏆 إنجازات الأسبوع</label>
+        <textarea class="field-input" id="r-achievements" rows="3" placeholder="أبرز الإنجازات خلال الأسبوع..."></textarea>
+      </div>
+      <div class="field-group">
+        <label class="field-label">📌 ملاحظات هامة</label>
+        <textarea class="field-input" id="r-notes" rows="3" placeholder="ملاحظات للعميل أو الفريق..."></textarea>
+      </div>
+      <div class="field-group">
+        <label class="field-label">📅 خطة الأسبوع القادم</label>
+        <textarea class="field-input" id="r-next-plan" rows="3" placeholder="خطة العمل للأسبوع القادم..."></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- SAVE ACTIONS -->
+  <div style="display:flex;gap:12px;justify-content:flex-end;padding:20px 0">
+    <button class="btn btn-outline" onclick="saveDraft()">⏾ حفظ مسودة</button>
+    <button class="btn btn-success" onclick="publishReport()">🚀 نشر التقرير للعميل</button>
+  </div>
 </div>
 
-<!-- ===== 11. NOTES ===== -->
-<div class="section" id="sec-notes">
-  <div class="sec-hdr"><div class="sec-title">📝 الملاحظات والتحليل</div><div class="sec-desc">تحليل شامل للفترة التسويقية</div></div>
-  <div class="card">
-    <div class="card-title"><div class="card-title-icon">📝</div>الملاحظات التفصيلية</div>
-    <div class="grid2">
-      <div class="field"><label>ملاحظة تسويقية</label><textarea id="n_marketing" rows="3" placeholder="ما الذي نجح في المحتوى والحملات؟"></textarea></div>
-      <div class="field"><label>ملاحظة تشغيلية</label><textarea id="n_ops" rows="3" placeholder="ملاحظات تشغيلية تؤثر على التسويق..."></textarea></div>
-      <div class="field"><label>ملاحظة منصات</label><textarea id="n_platforms" rows="3" placeholder="تيك توك، إنستغرام، قوقل ماب..."></textarea></div>
-      <div class="field"><label>ملاحظة مبيعات</label><textarea id="n_sales" rows="3" placeholder="تفسير حركة المبيعات..."></textarea></div>
-      <div class="field"><label>أبرز مشكلة هذا الأسبوع</label><textarea id="n_problem" rows="2" placeholder="ما التحدي الرئيسي؟"></textarea></div>
-      <div class="field"><label>أبرز فرصة هذا الأسبوع</label><textarea id="n_opportunity" rows="2" placeholder="ما الفرصة المتاحة؟"></textarea></div>
-      <div class="field span2"><label>قرار أو توصية للإدارة</label><textarea id="n_recommendation" rows="3" placeholder="توصية محددة وقابلة للتنفيذ..."></textarea></div>
+<!-- ============================================================ -->
+<!-- TAB 4: HISTORY -->
+<!-- ============================================================ -->
+<div class="tab-panel" id="panel-history">
+  <div class="page-header">
+    <div>
+      <div class="page-title">سجل التقارير</div>
+      <div class="page-sub">جميع التقارير المحفوظة</div>
+    </div>
+    <button class="btn btn-primary" onclick="loadHistory()">🔄 تحديث</button>
+  </div>
+  <div id="historyList">
+    <div class="empty-state">
+      <div class="empty-icon">🗂️</div>
+      <div class="empty-text">جارٍ التحميل...</div>
     </div>
   </div>
 </div>
 
-<!-- ===== 12. PLAN ===== -->
-<div class="section" id="sec-plan">
-  <div class="sec-hdr"><div class="sec-title">🗓️ الخطة القادمة</div><div class="sec-desc">خطوات العمل للأسبوع أو الشهر القادم</div></div>
-  <div id="plan-container"></div>
-  <button class="btn-add" onclick="addPlan()">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
-    إضافة خطة
-  </button>
-</div>
-
-<!-- ===== 13. SUMMARY ===== -->
-<div class="section" id="sec-summary">
-  <div class="sec-hdr"><div class="sec-title">✨ الملخص النهائي</div><div class="sec-desc">المؤشرات المحسوبة للعميل — تُحدَّث فور الحفظ</div></div>
-
-  <div class="summary-grid" id="summaryCards"></div>
-
-  <div class="card">
-    <div class="card-title"><div class="card-title-icon">🚀</div>الإجراءات</div>
-    <div class="action-bar">
-      <button class="btn btn-primary" onclick="saveAll()">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-        حفظ البيانات
-      </button>
-      <button class="btn btn-green" onclick="exportJSON()">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        تصدير JSON
-      </button>
-      <button class="btn btn-outline" onclick="copyJSON()">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-        نسخ JSON
-      </button>
-      <button class="btn btn-outline" onclick="window.open('client.html','_blank')">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-        معاينة صفحة العميل
-      </button>
-      <button class="btn btn-danger" onclick="resetAll()">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.41"/></svg>
-        تفريغ البيانات
-      </button>
-    </div>
-  </div>
-</div>
-
-</div><!-- end content -->
-</div><!-- end layout -->
-</div><!-- end #adminApp -->
-
-<!-- TOAST -->
-<div class="toast" id="toast"></div>
-
-<!-- Supabase client library -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
+</div><!-- .content -->
 <script>
-/* =============================================
-   SUPABASE CONFIG
-   غيّر المفتاح فقط: ضع Publishable key الخاص بك بدل PLACEHOLDER
-   ============================================= */
-const SUPABASE_URL = 'https://zxzitwqjkdadvyosvjx.supabase.co';
-const SUPABASE_PUBLISHABLE_KEY = 'PUT_YOUR_PUBLISHABLE_KEY_HERE';
-const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
-/* =============================================
-   NAVIGATION
-   ============================================= */
-function showSection(id, btn) {
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.sb-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('sec-' + id).classList.add('active');
-  if (btn) btn.classList.add('active');
-}
+// ============================================================
+// SUPABASE CONFIG
+// ============================================================
+const SUPABASE_URL = 'YOUR_SUPABASE_URL';
+const SUPABASE_KEY = 'YOUR_SUPABASE_PUBLISHABLE_KEY';
 
-function showPtab(id, btn) {
-  document.querySelectorAll('.ptab-pane').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.ptab-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('ptab-' + id).classList.add('active');
-  btn.classList.add('active');
-}
+let supabase = null;
+let currentUser = null;
 
-/* =============================================
-   HELPERS
-   ============================================= */
-const n = id => parseFloat(document.getElementById(id)?.value) || 0;
-const v = id => document.getElementById(id)?.value || '';
-const fmt = x => isNaN(x) ? '—' : Number(x.toFixed(1)).toLocaleString('ar-SA');
-const pct = (curr, prev) => prev === 0 ? '—' : ((curr - prev) / prev * 100).toFixed(1) + '%';
-const diff = (curr, prev) => curr - prev;
-
-function setCalc(id, val, cls) {
-  const el = document.getElementById(id);
-  if (!el) return;
-  el.textContent = val;
-  el.className = 'calc-item-val' + (cls ? ' ' + cls : '');
-}
-
-/* =============================================
-   AUTO CALCULATIONS
-   ============================================= */
-function calcSales() {
-  const ps = n('s_prev_sales'), cs = n('s_curr_sales');
-  const pi = n('s_prev_inv'), ci = n('s_curr_inv');
-  const pa = n('s_prev_avg'), ca = n('s_curr_avg');
-  const sdiff = diff(cs, ps), idiff = diff(ci, pi), adiff = diff(ca, pa);
-  const sg = ps ? pct(cs, ps) : '—';
-  const ig = pi ? pct(ci, pi) : '—';
-  setCalc('c_sales_growth', sg, sdiff >= 0 ? 'pos' : 'neg');
-  setCalc('c_sales_diff', (sdiff >= 0 ? '+' : '') + fmt(sdiff), sdiff >= 0 ? 'pos' : 'neg');
-  setCalc('c_inv_growth', ig, idiff >= 0 ? 'pos' : 'neg');
-  setCalc('c_inv_diff', (idiff >= 0 ? '+' : '') + fmt(idiff), idiff >= 0 ? 'pos' : 'neg');
-  setCalc('c_avg_diff', (adiff >= 0 ? '+' : '') + fmt(adiff), adiff === 0 ? '' : adiff > 0 ? 'pos' : 'neg');
-}
-
-function calcContent() {
-  const org = n('co_organic'), adv = n('co_adv');
-  const posts = n('co_ig_posts'), stories = n('co_ig_stories'), designs = n('co_designs');
-  const totalVid = org + adv;
-  const totalPub = totalVid + posts + stories;
-  const totalVis = designs + posts;
-  setCalc('c_total_videos', fmt(totalVid), 'br');
-  setCalc('c_total_published', fmt(totalPub), 'br');
-  setCalc('c_total_visual', fmt(totalVis), 'br');
-}
-
-function calcTiktok() {
-  const metrics = [
-    { prev: 'tt_prev_views', curr: 'tt_curr_views', label: 'مشاهدات المحتوى' },
-    { prev: 'tt_prev_acc', curr: 'tt_curr_acc', label: 'مشاهدات الحساب' },
-    { prev: 'tt_prev_likes', curr: 'tt_curr_likes', label: 'الإعجابات' },
-    { prev: 'tt_prev_comments', curr: 'tt_curr_comments', label: 'التعليقات' },
-    { prev: 'tt_prev_shares', curr: 'tt_curr_shares', label: 'المشاركات' },
-  ];
-  const container = document.getElementById('tt_calcs');
-  let html = '';
-  metrics.forEach(m => {
-    const p = n(m.prev), c = n(m.curr), d = diff(c, p);
-    const g = p ? pct(c, p) : '—';
-    html += `<div class="calc-item">
-      <div class="calc-item-label">${m.label}</div>
-      <div class="calc-item-val ${d >= 0 ? 'pos' : 'neg'}">${(d >= 0 ? '+' : '') + fmt(d)}</div>
-      <div style="font-size:11px;color:var(--t2)">${g}</div>
-    </div>`;
-  });
-  const likes = n('tt_curr_likes'), comments = n('tt_curr_comments'), shares = n('tt_curr_shares');
-  const engage = likes + comments + shares;
-  html += `<div class="calc-item"><div class="calc-item-label">إجمالي التفاعل</div><div class="calc-item-val br">${fmt(engage)}</div></div>`;
-  container.innerHTML = html;
-}
-
-function calcGmaps() {
-  const searches = n('gm_searches'), calls = n('gm_calls'), dirs = n('gm_directions'), menu = n('gm_menu');
-  const interact = searches + calls + dirs + menu;
-  const r5 = n('gm_r5'), r4 = n('gm_r4'), r3 = n('gm_r3'), r2 = n('gm_r2'), r1 = n('gm_r1');
-  const totalReviews = r5 + r4 + r3 + r2 + r1;
-  const replies = n('gm_replies');
-  const replyRate = totalReviews ? (replies / totalReviews * 100).toFixed(1) + '%' : '—';
-  const avgRating = totalReviews ? ((r5*5 + r4*4 + r3*3 + r2*2 + r1*1) / totalReviews).toFixed(2) : '—';
-  setCalc('c_gm_total_reviews', fmt(totalReviews), 'br');
-  setCalc('c_gm_interact', fmt(interact), 'br');
-  setCalc('c_gm_reply_rate', replyRate, 'pos');
-  setCalc('c_gm_avg_rating', avgRating, parseFloat(avgRating) >= 4 ? 'pos' : 'neg');
-}
-
-function calcCampaigns() {
-  const blocks = document.querySelectorAll('.camp-block');
-  let totalViews = 0, totalEngage = 0, totalVisits = 0, topName = '—', topViews = 0;
-  blocks.forEach(b => {
-    const views = parseFloat(b.querySelector('.camp-views').value) || 0;
-    const engage = parseFloat(b.querySelector('.camp-engage').value) || 0;
-    const visits = parseFloat(b.querySelector('.camp-visits').value) || 0;
-    const name = b.querySelector('.camp-name').value || '—';
-    totalViews += views; totalEngage += engage; totalVisits += visits;
-    if (views > topViews) { topViews = views; topName = name; }
-  });
-  document.getElementById('c_camp_count').textContent = blocks.length;
-  document.getElementById('c_camp_views').textContent = fmt(totalViews);
-  document.getElementById('c_camp_engage').textContent = fmt(totalEngage);
-  document.getElementById('c_camp_visits').textContent = fmt(totalVisits);
-  document.getElementById('c_camp_top').textContent = topName;
-  document.getElementById('sb-campaigns').textContent = blocks.length;
-}
-
-function calcInfluencers() {
-  const blocks = document.querySelectorAll('.inf-block');
-  let attended = 0, coordinated = 0, bestName = '—', bestViews = 0, totalCost = 0;
-  blocks.forEach(b => {
-    const status = b.querySelector('.inf-status').value;
-    const views = parseFloat(b.querySelector('.inf-views').value) || 0;
-    const cost = parseFloat(b.querySelector('.inf-cost').value) || 0;
-    const name = b.querySelector('.inf-name').value || '—';
-    if (status === 'حضر') attended++;
-    if (status !== 'لم يحضر') coordinated++;
-    totalCost += cost;
-    if (views > bestViews) { bestViews = views; bestName = name; }
-  });
-  document.getElementById('c_inf_total').textContent = blocks.length;
-  document.getElementById('c_inf_attended').textContent = attended;
-  document.getElementById('c_inf_coordinated').textContent = coordinated;
-  document.getElementById('c_inf_best').textContent = bestName;
-  document.getElementById('c_inf_cost').textContent = fmt(totalCost);
-  document.getElementById('sb-influencers').textContent = blocks.length;
-}
-
-/* =============================================
-   REPEATABLE BLOCKS
-   ============================================= */
-let campCount = 0, infCount = 0, achCount = 0, planCount = 0;
-
-function addCampaign() {
-  campCount++;
-  const id = campCount;
-  const container = document.getElementById('campaigns-container');
-  const div = document.createElement('div');
-  div.className = 'repeat-block camp-block';
-  div.innerHTML = `
-    <div class="repeat-hdr">
-      <div class="repeat-hdr-title"><span class="repeat-hdr-num">${id}</span> حملة جديدة</div>
-      <button class="btn-remove" onclick="this.closest('.repeat-block').remove(); calcCampaigns()">حذف</button>
-    </div>
-    <div class="repeat-body">
-      <div class="grid3">
-        <div class="field"><label>اسم الحملة</label><input type="text" class="camp-name" placeholder="حملة الغداء" oninput="calcCampaigns()"></div>
-        <div class="field"><label>الفترة</label><input type="text" placeholder="1 - 10 أبريل"></div>
-        <div class="field"><label>الهدف</label><input type="text" placeholder="زيادة المبيعات"></div>
-        <div class="field"><label>عدد المعلنين</label><input type="number" placeholder="0"></div>
-        <div class="field"><label>المشاهدات</label><input type="number" class="camp-views" placeholder="0" oninput="calcCampaigns()"></div>
-        <div class="field"><label>التفاعل</label><input type="number" class="camp-engage" placeholder="0" oninput="calcCampaigns()"></div>
-        <div class="field"><label>الزيارات</label><input type="number" class="camp-visits" placeholder="0" oninput="calcCampaigns()"></div>
-        <div class="field"><label>أفضل فيديو (مشاهدات)</label><input type="number" placeholder="0"></div>
-        <div class="field"><label>تكلفة الحملة (ريال)</label><input type="number" placeholder="0"></div>
-        <div class="field span3"><label>ملاحظات الحملة</label><textarea rows="2"></textarea></div>
-      </div>
-    </div>`;
-  container.appendChild(div);
-  calcCampaigns();
-}
-
-function addInfluencer() {
-  infCount++;
-  const id = infCount;
-  const container = document.getElementById('influencers-container');
-  const div = document.createElement('div');
-  div.className = 'repeat-block inf-block';
-  div.innerHTML = `
-    <div class="repeat-hdr">
-      <div class="repeat-hdr-title"><span class="repeat-hdr-num">${id}</span> معلن جديد</div>
-      <button class="btn-remove" onclick="this.closest('.repeat-block').remove(); calcInfluencers()">حذف</button>
-    </div>
-    <div class="repeat-body">
-      <div class="grid3">
-        <div class="field"><label>اسم المعلن</label><input type="text" class="inf-name" placeholder="سارة" oninput="calcInfluencers()"></div>
-        <div class="field"><label>المنصة</label>
-          <select>
-            <option>تيك توك</option><option>إنستغرام</option><option>يوتيوب</option><option>سناب شات</option><option>متعدد</option>
-          </select>
-        </div>
-        <div class="field"><label>تاريخ الزيارة</label><input type="date"></div>
-        <div class="field"><label>حالة الحضور</label>
-          <select class="inf-status" onchange="calcInfluencers()">
-            <option>حضر</option><option>لم يحضر</option><option>مؤجل</option>
-          </select>
-        </div>
-        <div class="field"><label>المشاهدات</label><input type="number" class="inf-views" placeholder="0" oninput="calcInfluencers()"></div>
-        <div class="field"><label>الإعجابات</label><input type="number" placeholder="0"></div>
-        <div class="field"><label>التعليقات</label><input type="number" placeholder="0"></div>
-        <div class="field"><label>المشاركات</label><input type="number" placeholder="0"></div>
-        <div class="field"><label>تكلفة التعاون (ريال)</label><input type="number" class="inf-cost" placeholder="0" oninput="calcInfluencers()"></div>
-        <div class="field span2"><label>رابط المحتوى</label><input type="url" placeholder="https://..."></div>
-        <div class="field span3"><label>ملاحظات</label><textarea rows="2"></textarea></div>
-      </div>
-    </div>`;
-  container.appendChild(div);
-  calcInfluencers();
-}
-
-function addAchievement() {
-  achCount++;
-  const id = achCount;
-  const container = document.getElementById('achievements-container');
-  const div = document.createElement('div');
-  div.className = 'repeat-block';
-  div.innerHTML = `
-    <div class="repeat-hdr">
-      <div class="repeat-hdr-title"><span class="repeat-hdr-num">${id}</span> منجز جديد</div>
-      <button class="btn-remove" onclick="this.closest('.repeat-block').remove(); document.getElementById('sb-achievements').textContent = document.querySelectorAll('#achievements-container .repeat-block').length">حذف</button>
-    </div>
-    <div class="repeat-body">
-      <div class="grid3">
-        <div class="field span2"><label>عنوان المنجز</label><input type="text" placeholder="حقق الحساب 1 مليون مشاهدة"></div>
-        <div class="field"><label>نوع المنجز</label>
-          <select>
-            <option>محتوى</option><option>مبيعات</option><option>منصة</option><option>حملة</option><option>قوقل ماب</option><option>تطبيقات توصيل</option><option>تشغيل</option>
-          </select>
-        </div>
-        <div class="field"><label>التاريخ</label><input type="date"></div>
-        <div class="field"><label>الحالة</label>
-          <select>
-            <option>مكتمل</option><option>قيد التنفيذ</option>
-          </select>
-        </div>
-        <div></div>
-        <div class="field span2"><label>وصف المنجز</label><textarea rows="2"></textarea></div>
-        <div class="field"><label>الأثر المتوقع</label><textarea rows="2"></textarea></div>
-      </div>
-    </div>`;
-  container.appendChild(div);
-  document.getElementById('sb-achievements').textContent = document.querySelectorAll('#achievements-container .repeat-block').length;
-}
-
-function addPlan() {
-  planCount++;
-  const id = planCount;
-  const container = document.getElementById('plan-container');
-  const div = document.createElement('div');
-  div.className = 'repeat-block';
-  div.innerHTML = `
-    <div class="repeat-hdr">
-      <div class="repeat-hdr-title"><span class="repeat-hdr-num">${id}</span> خطة جديدة</div>
-      <button class="btn-remove" onclick="this.closest('.repeat-block').remove(); document.getElementById('sb-plan').textContent = document.querySelectorAll('#plan-container .repeat-block').length">حذف</button>
-    </div>
-    <div class="repeat-body">
-      <div class="grid3">
-        <div class="field span2"><label>عنوان الخطة</label><input type="text" placeholder="تكثيف محتوى الغداء"></div>
-        <div class="field"><label>القسم المرتبط</label>
-          <select>
-            <option>محتوى</option><option>مبيعات</option><option>منصة</option><option>حملة</option><option>قوقل ماب</option><option>توصيل</option>
-          </select>
-        </div>
-        <div class="field"><label>الأولوية</label>
-          <select>
-            <option>عالية</option><option>متوسطة</option><option>منخفضة</option>
-          </select>
-        </div>
-        <div class="field"><label>المسؤول</label><input type="text" placeholder="اسم المسؤول"></div>
-        <div class="field"><label>تاريخ التنفيذ المتوقع</label><input type="date"></div>
-        <div class="field span3"><label>الوصف</label><textarea rows="2"></textarea></div>
-      </div>
-    </div>`;
-  container.appendChild(div);
-  document.getElementById('sb-plan').textContent = document.querySelectorAll('#plan-container .repeat-block').length;
-}
-
-/* =============================================
-   COLLECT ALL DATA
-   ============================================= */
-function collectData() {
-  // Campaigns
-  const campaigns = [];
-  document.querySelectorAll('.camp-block').forEach(b => {
-    const inputs = b.querySelectorAll('input,select,textarea');
-    campaigns.push({
-      name: inputs[0].value, period: inputs[1].value, goal: inputs[2].value,
-      influencers: inputs[3].value, views: inputs[4].value, engage: inputs[5].value,
-      visits: inputs[6].value, bestVideo: inputs[7].value, cost: inputs[8].value,
-      notes: inputs[9].value
-    });
-  });
-
-  // Influencers
-  const influencers = [];
-  document.querySelectorAll('.inf-block').forEach(b => {
-    const inputs = b.querySelectorAll('input,select,textarea');
-    influencers.push({
-      name: inputs[0].value, platform: inputs[1].value, date: inputs[2].value,
-      status: inputs[3].value, views: inputs[4].value, likes: inputs[5].value,
-      comments: inputs[6].value, shares: inputs[7].value, cost: inputs[8].value,
-      link: inputs[9].value, notes: inputs[10].value
-    });
-  });
-
-  // Achievements
-  const achievements = [];
-  document.querySelectorAll('#achievements-container .repeat-block').forEach(b => {
-    const inputs = b.querySelectorAll('input,select,textarea');
-    achievements.push({ title: inputs[0].value, type: inputs[1].value, date: inputs[2].value, status: inputs[3].value, desc: inputs[4].value, impact: inputs[5].value });
-  });
-
-  // Plan
-  const plan = [];
-  document.querySelectorAll('#plan-container .repeat-block').forEach(b => {
-    const inputs = b.querySelectorAll('input,select,textarea');
-    plan.push({ title: inputs[0].value, section: inputs[1].value, priority: inputs[2].value, owner: inputs[3].value, date: inputs[4].value, desc: inputs[5].value });
-  });
-
-  return {
-    report: { client: v('r_client'), name: v('r_name'), month: v('r_month'), week: v('r_week'), from: v('r_from'), to: v('r_to'), status: v('r_status'), summary: v('r_summary') },
-    sales: { prevSales: v('s_prev_sales'), currSales: v('s_curr_sales'), prevInv: v('s_prev_inv'), currInv: v('s_curr_inv'), prevAvg: v('s_prev_avg'), currAvg: v('s_curr_avg') },
-    content: { organic: v('co_organic'), adv: v('co_adv'), igPosts: v('co_ig_posts'), igStories: v('co_ig_stories'), designs: v('co_designs'), shoots: v('co_shoots'), ugc: v('co_ugc'), bestTitle: v('co_best_title'), bestViews: v('co_best_views'), bestLikes: v('co_best_likes'), bestNote: v('co_best_note') },
-    tiktok: { prevViews: v('tt_prev_views'), currViews: v('tt_curr_views'), prevAcc: v('tt_prev_acc'), currAcc: v('tt_curr_acc'), prevLikes: v('tt_prev_likes'), currLikes: v('tt_curr_likes'), prevComments: v('tt_prev_comments'), currComments: v('tt_curr_comments'), prevShares: v('tt_prev_shares'), currShares: v('tt_curr_shares'), videos: v('tt_videos'), replied: v('tt_replied'), msgs: v('tt_msgs') },
-    instagram: { views: v('ig_views'), reach: v('ig_reach'), engage: v('ig_engage'), growth: v('ig_growth'), reels: v('ig_reels'), posts: v('ig_posts'), stories: v('ig_stories'), repliedComments: v('ig_replied_comments'), repliedDMs: v('ig_replied_dms'), reposts: v('ig_reposts'), openConvs: v('ig_open_convs') },
-    gmaps: { profileViews: v('gm_profile_views'), searches: v('gm_searches'), calls: v('gm_calls'), directions: v('gm_directions'), menu: v('gm_menu'), r5: v('gm_r5'), r4: v('gm_r4'), r3: v('gm_r3'), r2: v('gm_r2'), r1: v('gm_r1'), replies: v('gm_replies'), notes: v('gm_notes'), topWord: v('gm_top_word') },
-    delivery: { hungerStation: { photos: v('hs_photos'), names: v('hs_names'), descs: v('hs_descs'), deleted: v('hs_deleted'), top: v('hs_top'), low: v('hs_low'), notes: v('hs_notes'), menuNotes: v('hs_menu_notes') }, keeta: { photos: v('kt_photos'), names: v('kt_names'), descs: v('kt_descs'), deleted: v('kt_deleted'), top: v('kt_top'), low: v('kt_low'), notes: v('kt_notes'), menuNotes: v('kt_menu_notes') } },
-    campaigns, influencers, achievements, plan,
-    notes: { marketing: v('n_marketing'), ops: v('n_ops'), platforms: v('n_platforms'), sales: v('n_sales'), problem: v('n_problem'), opportunity: v('n_opportunity'), recommendation: v('n_recommendation') },
-    _savedAt: new Date().toISOString()
-  };
-}
-
-/* =============================================
-   CALCULATE CLIENT KPIs
-   ============================================= */
-function calcClientKPIs(d) {
-  const ps = parseFloat(d.sales.prevSales) || 0, cs = parseFloat(d.sales.currSales) || 0;
-  const pi = parseFloat(d.sales.prevInv) || 0, ci = parseFloat(d.sales.currInv) || 0;
-  const org = parseFloat(d.content.organic) || 0, adv = parseFloat(d.content.adv) || 0;
-  const igStories = parseFloat(d.content.igStories) || 0;
-  const ttLikes = parseFloat(d.tiktok.currLikes) || 0, ttComments = parseFloat(d.tiktok.currComments) || 0, ttShares = parseFloat(d.tiktok.currShares) || 0;
-  const igEngage = parseFloat(d.instagram.engage) || 0;
-  const ttViews = parseFloat(d.tiktok.currViews) || 0, igViews = parseFloat(d.instagram.views) || 0;
-  const r5 = parseFloat(d.gmaps.r5)||0, r4=parseFloat(d.gmaps.r4)||0, r3=parseFloat(d.gmaps.r3)||0, r2=parseFloat(d.gmaps.r2)||0, r1=parseFloat(d.gmaps.r1)||0;
-  const totalReviews = r5 + r4 + r3 + r2 + r1;
-  let topCamp = '—', topCampViews = 0;
-  d.campaigns.forEach(c => { const cv = parseFloat(c.views) || 0; if (cv > topCampViews) { topCampViews = cv; topCamp = c.name; } });
-
-  return {
-    totalViews: fmt(ttViews + igViews),
-    totalEngagement: fmt(ttLikes + ttComments + ttShares + igEngage),
-    totalVideos: fmt(org + adv),
-    totalPosts: fmt(parseFloat(d.content.igPosts) || 0),
-    totalStories: fmt(igStories),
-    totalInfluencers: d.influencers.length,
-    totalCampaigns: d.campaigns.length,
-    totalReviews: fmt(totalReviews),
-    salesGrowth: ps ? ((cs - ps) / ps * 100).toFixed(1) + '%' : '—',
-    invoiceGrowth: pi ? ((ci - pi) / pi * 100).toFixed(1) + '%' : '—',
-    avgInvoice: d.sales.currAvg ? d.sales.currAvg + ' ريال' : '—',
-    topVideo: d.content.bestViews ? fmt(parseFloat(d.content.bestViews)) : '—',
-    topCampaign: topCampViews > 0 ? fmt(topCampViews) : '—',
-  };
-}
-
-/* =============================================
-   SUMMARY CARDS RENDER
-   ============================================= */
-function renderSummary() {
-  const d = collectData();
-  const kpis = calcClientKPIs(d);
-  const cards = [
-    { label: 'إجمالي المشاهدات', val: kpis.totalViews, cls: 'br' },
-    { label: 'إجمالي التفاعل', val: kpis.totalEngagement, cls: '' },
-    { label: 'إجمالي الفيديوهات', val: kpis.totalVideos, cls: '' },
-    { label: 'عدد البوستات', val: kpis.totalPosts, cls: '' },
-    { label: 'عدد الستوري', val: kpis.totalStories, cls: '' },
-    { label: 'عدد المعلنين', val: kpis.totalInfluencers, cls: '' },
-    { label: 'عدد الحملات', val: kpis.totalCampaigns, cls: '' },
-    { label: 'التقييمات الجديدة', val: kpis.totalReviews, cls: '' },
-    { label: 'نمو المبيعات', val: kpis.salesGrowth, cls: 'pos' },
-    { label: 'نمو الفواتير', val: kpis.invoiceGrowth, cls: 'pos' },
-    { label: 'متوسط الفاتورة', val: kpis.avgInvoice, cls: 'br' },
-    { label: 'أعلى فيديو مشاهدة', val: kpis.topVideo, cls: '' },
-    { label: 'أعلى حملة مشاهدة', val: kpis.topCampaign, cls: '' },
-  ];
-  document.getElementById('summaryCards').innerHTML = cards.map(c => `
-    <div class="summary-card">
-      <div class="summary-card-label">${c.label}</div>
-      <div class="summary-card-val ${c.cls}">${c.val}</div>
-    </div>`).join('');
-}
-
-/* =============================================
-   SAVE
-   ============================================= */
-async function saveAll() {
-  calcSales(); calcContent(); calcTiktok(); calcGmaps(); calcCampaigns(); calcInfluencers();
-
-  const raw = collectData();
-  const kpis = calcClientKPIs(raw);
-  const payload = { kpis, raw, _savedAt: raw._savedAt };
-
-  // حفظ محلي احتياطي داخل المتصفح
-  localStorage.setItem('almazar_admin_data', JSON.stringify(raw));
-  localStorage.setItem('almazar_dashboard_data', JSON.stringify(payload));
-
-  renderSummary();
-
-  const badge = document.getElementById('saveStatusBadge');
-  badge.textContent = 'جارِ الحفظ...';
-  badge.style.background = '#FFF8E1';
-  badge.style.color = '#B45309';
-  badge.style.borderColor = '#FBBF24';
-
-  // حفظ سحابي في Supabase
-  const cloudResult = await saveReportToSupabase(raw, kpis);
-
-  if (cloudResult.ok) {
-    badge.textContent = 'تم الحفظ السحابي ✓';
-    badge.style.background = '#E8F5E9';
-    badge.style.color = '#2E7D32';
-    badge.style.borderColor = '#A5D6A7';
-    showToast('تم حفظ البيانات في Supabase وتجهيز بيانات صفحة العميل بنجاح ✓', 'green');
-  } else {
-    badge.textContent = 'حفظ محلي فقط';
-    badge.style.background = '#FFF8E1';
-    badge.style.color = '#B45309';
-    badge.style.borderColor = '#FBBF24';
-    showToast('تم الحفظ محليًا، لكن لم يتم الحفظ في Supabase. راجع المفتاح أو الجدول.', 'warn');
-    console.warn('Supabase save error:', cloudResult.error);
+async function initSupabase() {
+  if (typeof window.supabase !== 'undefined') {
+    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    document.getElementById('connStatus').textContent = 'متصل';
+    return true;
   }
+  return false;
 }
 
+// ============================================================
+// APP STATE
+// ============================================================
+let tasks = [];
+let activities = [];
+let currentFilter = 'all';
+let currentReportId = null;
+let currentStatus = 'draft';
 
-
-/* =============================================
-   SUPABASE SAVE HELPERS
-   ============================================= */
-function isSupabaseConfigured() {
-  return SUPABASE_PUBLISHABLE_KEY && SUPABASE_PUBLISHABLE_KEY !== 'PUT_YOUR_PUBLISHABLE_KEY_HERE';
-}
-
-function buildSupabaseFullRow(raw, kpis) {
-  const report = raw.report || {};
-  const content = raw.content || {};
-  const tiktok = raw.tiktok || {};
-  const instagram = raw.instagram || {};
-  const sales = raw.sales || {};
-  const notes = raw.notes || {};
-
-  return {
-    client_name: report.client || 'مطعم المزار الدمشقي',
-    report_name: report.name || '',
-    month: report.month || '',
-    week: report.week ? `الأسبوع ${report.week}` : '',
-    week_number: report.week ? Number(report.week) : null,
-    period_from: report.from || null,
-    period_to: report.to || null,
-    status: report.status || 'مسودة',
-    summary: report.summary || '',
-
-    videos: Number(content.organic || 0) + Number(content.adv || 0),
-    stories: Number(content.igStories || 0),
-    designs: Number(content.designs || 0),
-    tiktok_views: Number(tiktok.currViews || 0),
-    instagram_views: Number(instagram.views || 0),
-    comments_replied: Number(tiktok.replied || 0) + Number(instagram.repliedComments || 0),
-    messages_replied: Number(tiktok.msgs || 0) + Number(instagram.repliedDMs || 0),
-    new_followers: 0,
-    sales: Number(sales.currSales || 0),
-    orders: Number(sales.currInv || 0),
-    notes: [notes.marketing, notes.ops, notes.platforms, notes.sales, notes.recommendation].filter(Boolean).join('\n\n'),
-
-    raw_data: raw,
-    dashboard_data: kpis,
-    updated_at: new Date().toISOString()
-  };
-}
-
-function buildSupabaseSimpleRow(raw) {
-  const report = raw.report || {};
-  const content = raw.content || {};
-  const tiktok = raw.tiktok || {};
-  const instagram = raw.instagram || {};
-  const sales = raw.sales || {};
-  const notes = raw.notes || {};
-
-  return {
-    week: report.week ? `الأسبوع ${report.week}` : 'الأسبوع الحالي',
-    date: report.to || new Date().toISOString().slice(0, 10),
-    videos: Number(content.organic || 0) + Number(content.adv || 0),
-    stories: Number(content.igStories || 0),
-    designs: Number(content.designs || 0),
-    tiktok_views: Number(tiktok.currViews || 0),
-    instagram_views: Number(instagram.views || 0),
-    comments_replied: Number(tiktok.replied || 0) + Number(instagram.repliedComments || 0),
-    messages_replied: Number(tiktok.msgs || 0) + Number(instagram.repliedDMs || 0),
-    new_followers: 0,
-    sales: Number(sales.currSales || 0),
-    orders: Number(sales.currInv || 0),
-    notes: [report.summary, notes.marketing, notes.ops, notes.platforms, notes.sales, notes.recommendation].filter(Boolean).join('\n\n')
-  };
-}
-
-async function saveReportToSupabase(raw, kpis) {
-  if (!isSupabaseConfigured()) {
-    return { ok: false, error: 'Supabase publishable key is missing. Replace PUT_YOUR_PUBLISHABLE_KEY_HERE.' };
-  }
-
-  const fullRow = buildSupabaseFullRow(raw, kpis);
-  let { error } = await supabaseClient.from('reports').insert([fullRow]);
-
-  if (!error) return { ok: true };
-
-  console.warn('Full Supabase insert failed, trying simple row:', error);
-
-  const simpleRow = buildSupabaseSimpleRow(raw);
-  const fallback = await supabaseClient.from('reports').insert([simpleRow]);
-
-  if (fallback.error) {
-    return { ok: false, error: fallback.error };
-  }
-
-  return { ok: true, fallback: true };
-}
-
-async function loadLatestReportFromSupabase() {
-  if (!isSupabaseConfigured()) return null;
-
-  const { data, error } = await supabaseClient
-    .from('reports')
-    .select('*')
-    .order('created_at', { ascending: false })
-    .limit(1);
-
-  if (error) {
-    console.warn('Supabase load error:', error);
-    return null;
-  }
-
-  return data && data.length ? data[0] : null;
-}
-
-/* =============================================
-   LOAD SAVED DATA
-   ============================================= */
-function loadSavedData() {
-  const raw = localStorage.getItem('almazar_admin_data');
-  if (!raw) return;
-  try {
-    const d = JSON.parse(raw);
-    const set = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ''; };
-    if (d.report) { set('r_client', d.report.client); set('r_name', d.report.name); set('r_month', d.report.month); set('r_week', d.report.week); set('r_from', d.report.from); set('r_to', d.report.to); set('r_status', d.report.status); set('r_summary', d.report.summary); }
-    if (d.sales) { set('s_prev_sales', d.sales.prevSales); set('s_curr_sales', d.sales.currSales); set('s_prev_inv', d.sales.prevInv); set('s_curr_inv', d.sales.currInv); set('s_prev_avg', d.sales.prevAvg); set('s_curr_avg', d.sales.currAvg); }
-    if (d.content) { set('co_organic', d.content.organic); set('co_adv', d.content.adv); set('co_ig_posts', d.content.igPosts); set('co_ig_stories', d.content.igStories); set('co_designs', d.content.designs); set('co_shoots', d.content.shoots); set('co_ugc', d.content.ugc); set('co_best_title', d.content.bestTitle); set('co_best_views', d.content.bestViews); set('co_best_likes', d.content.bestLikes); set('co_best_note', d.content.bestNote); }
-    if (d.tiktok) { set('tt_prev_views', d.tiktok.prevViews); set('tt_curr_views', d.tiktok.currViews); set('tt_prev_acc', d.tiktok.prevAcc); set('tt_curr_acc', d.tiktok.currAcc); set('tt_prev_likes', d.tiktok.prevLikes); set('tt_curr_likes', d.tiktok.currLikes); set('tt_prev_comments', d.tiktok.prevComments); set('tt_curr_comments', d.tiktok.currComments); set('tt_prev_shares', d.tiktok.prevShares); set('tt_curr_shares', d.tiktok.currShares); set('tt_videos', d.tiktok.videos); set('tt_replied', d.tiktok.replied); set('tt_msgs', d.tiktok.msgs); }
-    if (d.instagram) { set('ig_views', d.instagram.views); set('ig_reach', d.instagram.reach); set('ig_engage', d.instagram.engage); set('ig_growth', d.instagram.growth); set('ig_reels', d.instagram.reels); set('ig_posts', d.instagram.posts); set('ig_stories', d.instagram.stories); set('ig_replied_comments', d.instagram.repliedComments); set('ig_replied_dms', d.instagram.repliedDMs); set('ig_reposts', d.instagram.reposts); set('ig_open_convs', d.instagram.openConvs); }
-    if (d.gmaps) { set('gm_profile_views', d.gmaps.profileViews); set('gm_searches', d.gmaps.searches); set('gm_calls', d.gmaps.calls); set('gm_directions', d.gmaps.directions); set('gm_menu', d.gmaps.menu); set('gm_r5', d.gmaps.r5); set('gm_r4', d.gmaps.r4); set('gm_r3', d.gmaps.r3); set('gm_r2', d.gmaps.r2); set('gm_r1', d.gmaps.r1); set('gm_replies', d.gmaps.replies); set('gm_notes', d.gmaps.notes); set('gm_top_word', d.gmaps.topWord); }
-    if (d.delivery) { const hs = d.delivery.hungerStation || {}; const kt = d.delivery.keeta || {}; set('hs_photos',hs.photos);set('hs_names',hs.names);set('hs_descs',hs.descs);set('hs_deleted',hs.deleted);set('hs_top',hs.top);set('hs_low',hs.low);set('hs_notes',hs.notes);set('hs_menu_notes',hs.menuNotes); set('kt_photos',kt.photos);set('kt_names',kt.names);set('kt_descs',kt.descs);set('kt_deleted',kt.deleted);set('kt_top',kt.top);set('kt_low',kt.low);set('kt_notes',kt.notes);set('kt_menu_notes',kt.menuNotes); }
-    if (d.notes) { set('n_marketing',d.notes.marketing);set('n_ops',d.notes.ops);set('n_platforms',d.notes.platforms);set('n_sales',d.notes.sales);set('n_problem',d.notes.problem);set('n_opportunity',d.notes.opportunity);set('n_recommendation',d.notes.recommendation); }
-    if (d.campaigns) d.campaigns.forEach(() => addCampaign());
-    if (d.influencers) d.influencers.forEach(() => addInfluencer());
-    if (d.achievements) d.achievements.forEach(() => addAchievement());
-    if (d.plan) d.plan.forEach(() => addPlan());
-    // Recalculate
-    calcSales(); calcContent(); calcTiktok(); calcGmaps(); calcCampaigns(); calcInfluencers();
-    const badge = document.getElementById('saveStatusBadge');
-    badge.textContent = 'تم التحميل ✓';
-    badge.style.background = '#E8F5E9';
-    badge.style.color = '#2E7D32';
-  } catch(e) { console.warn('Load error', e); }
-}
-
-/* =============================================
-   EXPORT / COPY
-   ============================================= */
-function exportJSON() {
-  const raw = collectData();
-  const kpis = calcClientKPIs(raw);
-  const blob = new Blob([JSON.stringify({ raw, kpis }, null, 2)], { type: 'application/json' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'almazar_data_' + new Date().toISOString().slice(0,10) + '.json';
-  a.click();
-  showToast('تم تصدير ملف JSON بنجاح');
-}
-
-function copyJSON() {
-  const raw = collectData();
-  const kpis = calcClientKPIs(raw);
-  navigator.clipboard.writeText(JSON.stringify({ raw, kpis }, null, 2)).then(() => showToast('تم نسخ JSON إلى الحافظة ✓'));
-}
-
-/* =============================================
-   RESET
-   ============================================= */
-function resetAll() {
-  if (!confirm('هل أنت متأكد من تفريغ جميع البيانات؟ لا يمكن التراجع.')) return;
-  localStorage.removeItem('almazar_admin_data');
-  localStorage.removeItem('almazar_dashboard_data');
-  location.reload();
-}
-
-/* =============================================
-   TOAST
-   ============================================= */
-let toastTimer;
-function showToast(msg, type = 'green') {
+// ============================================================
+// UTILITIES
+// ============================================================
+function toast(msg, type = '') {
   const t = document.getElementById('toast');
   t.textContent = msg;
-  t.style.background = type === 'warn' ? 'var(--amber)' : 'var(--green)';
-  t.classList.add('show');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
+  t.className = 'show ' + type;
+  setTimeout(() => { t.className = '' }, 3500);
 }
 
+function loading(show) {
+  document.getElementById('loadingOverlay').classList.toggle('show', show);
+}
 
+function v(id) { return document.getElementById(id)?.value || ''; }
+function n(id) { return parseFloat(document.getElementById(id)?.value) || 0; }
+function s(id, val) { const el = document.getElementById(id); if (el) el.value = val; }
 
-/* =============================================
-   ADMIN AUTH FUNCTIONS
-   ============================================= */
-const ADMIN_AUTH_KEY = 'almazar_admin_auth';
-const ADMIN_VALID_USER = 'admin';
-const ADMIN_VALID_PASS = '12345';
+function numChange(field, delta) {
+  const el = document.getElementById('act-' + field);
+  if (!el) return;
+  el.value = Math.max(0, parseInt(el.value || 0) + delta);
+}
 
-function checkAdminAuth() {
-  if (localStorage.getItem(ADMIN_AUTH_KEY) === 'true') {
-    showAdminApp();
-  } else {
-    showAdminLogin();
+function toggleSection(head) {
+  const body = head.nextElementSibling;
+  const arrow = head.querySelector('.toggle-arrow');
+  body.classList.toggle('collapsed');
+  arrow.classList.toggle('open', !body.classList.contains('collapsed'));
+}
+
+function toggleAddTask() {
+  const card = document.getElementById('addTaskCard');
+  card.style.display = card.style.display === 'none' ? 'block' : 'none';
+  if (card.style.display === 'block') {
+    // Set today's date
+    document.getElementById('taskDate').value = new Date().toISOString().split('T')[0];
   }
 }
 
-function showAdminApp() {
-  document.getElementById('adminLoginScreen').style.display = 'none';
-  document.getElementById('adminApp').style.display = 'block';
+// ============================================================
+// TABS
+// ============================================================
+function switchTab(name) {
+  document.querySelectorAll('.tab-btn').forEach((b, i) => {
+    const tabs = ['tasks','activity','report','history'];
+    b.classList.toggle('active', tabs[i] === name);
+  });
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + name)?.classList.add('active');
+  if (name === 'history') loadHistory();
+  if (name === 'activity') loadActivityLog();
 }
 
-function showAdminLogin() {
-  document.getElementById('adminApp').style.display = 'none';
-  document.getElementById('adminLoginScreen').style.display = 'flex';
-}
+// ============================================================
+// TASKS
+// ============================================================
+const TYPE_LABELS = {
+  content:'محتوى', engagement:'تفاعل', campaign:'حملة',
+  gmaps:'خرائط Google', delivery:'توصيل', sales:'مبيعات', other:'أخرى'
+};
+const TYPE_CLASSES = {
+  content:'badge-content', engagement:'badge-engagement', campaign:'badge-campaign',
+  gmaps:'badge-gmaps', delivery:'badge-delivery', sales:'badge-sales', other:'badge-other'
+};
+const PRIORITY_CLASSES = { high:'priority-high', medium:'priority-medium', low:'priority-low' };
+const PRIORITY_LABELS = { high:'عالية', medium:'متوسطة', low:'منخفضة' };
+const STATUS_CLASSES = { pending:'status-pending', inprogress:'status-inprogress', done:'status-done' };
+const STATUS_LABELS = { pending:'انتظار', inprogress:'جاري', done:'مكتمل' };
 
-function handleAdminLogin() {
-  const user = document.getElementById('adminLoginUsername').value.trim();
-  const pass = document.getElementById('adminLoginPassword').value;
-  const err = document.getElementById('adminLoginError');
+async function saveTask() {
+  const title = v('taskTitle').trim();
+  if (!title) { toast('يرجى إدخال عنوان المهمة', 'error'); return; }
 
-  if (user === ADMIN_VALID_USER && pass === ADMIN_VALID_PASS) {
-    err.classList.remove('visible');
-    localStorage.setItem(ADMIN_AUTH_KEY, 'true');
-    showAdminApp();
+  const task = {
+    title,
+    description: v('taskDesc'),
+    type: v('taskType') || 'other',
+    priority: v('taskPriority') || 'medium',
+    status: v('taskStatus') || 'pending',
+    date: v('taskDate') || new Date().toISOString().split('T')[0],
+    created_at: new Date().toISOString()
+  };
+
+  loading(true);
+  if (supabase && SUPABASE_URL !== 'YOUR_SUPABASE_URL') {
+    const { data, error } = await supabase.from('tasks').insert([task]).select();
+    if (error) { toast('خطأ في حفظ المهمة: ' + error.message, 'error'); loading(false); return; }
+    task.id = data[0].id;
   } else {
-    err.classList.remove('visible');
-    void err.offsetWidth;
-    err.classList.add('visible');
-    document.getElementById('adminLoginPassword').value = '';
-    document.getElementById('adminLoginPassword').focus();
+    task.id = Date.now().toString();
+  }
+
+  tasks.push(task);
+  renderTasks();
+  toggleAddTask();
+
+  // Reset form
+  s('taskTitle', ''); s('taskDesc', '');
+  s('taskType', 'content'); s('taskPriority', 'medium');
+  s('taskStatus', 'pending');
+
+  loading(false);
+  toast('✅ تم حفظ المهمة', 'success');
+}
+
+async function toggleTaskDone(id) {
+  const task = tasks.find(t => t.id == id);
+  if (!task) return;
+
+  const newStatus = task.status === 'done' ? 'pending' : 'done';
+  task.status = newStatus;
+
+  if (supabase && SUPABASE_URL !== 'YOUR_SUPABASE_URL') {
+    await supabase.from('tasks').update({ status: newStatus }).eq('id', id);
+  }
+  renderTasks();
+}
+
+async function deleteTask(id) {
+  if (!confirm('هل تريد حذف هذه المهمة؟')) return;
+  tasks = tasks.filter(t => t.id != id);
+
+  if (supabase && SUPABASE_URL !== 'YOUR_SUPABASE_URL') {
+    await supabase.from('tasks').delete().eq('id', id);
+  }
+  renderTasks();
+  toast('تم حذف المهمة');
+}
+
+function filterTasks(filter) {
+  currentFilter = filter;
+  document.querySelectorAll('[id^="filter-"]').forEach(b => {
+    b.style.borderColor = '';
+    b.style.color = '';
+    b.style.background = '';
+  });
+  const activeBtn = document.getElementById('filter-' + filter);
+  if (activeBtn) {
+    activeBtn.style.borderColor = 'var(--br)';
+    activeBtn.style.color = 'var(--br)';
+    activeBtn.style.background = 'var(--bg3)';
+  }
+  renderTasks();
+}
+
+function renderTasks() {
+  const filtered = currentFilter === 'all' ? tasks :
+    tasks.filter(t => t.status === currentFilter);
+
+  // Update stats
+  document.getElementById('stat-total').textContent = tasks.length;
+  document.getElementById('stat-pending').textContent = tasks.filter(t => t.status === 'pending').length;
+  document.getElementById('stat-inprogress').textContent = tasks.filter(t => t.status === 'inprogress').length;
+  document.getElementById('stat-done').textContent = tasks.filter(t => t.status === 'done').length;
+
+  const list = document.getElementById('taskList');
+  if (filtered.length === 0) {
+    list.innerHTML = '<div class="empty-state"><div class="empty-icon">📋</div><div class="empty-text">لا توجد مهام</div></div>';
+    return;
+  }
+
+  list.innerHTML = filtered.map(t => `
+    <div class="task-item ${t.status === 'done' ? 'done' : ''}">
+      <div class="task-check ${t.status === 'done' ? 'checked' : ''}" onclick="toggleTaskDone('${t.id}')">
+        ${t.status === 'done' ? '✓' : ''}
+      </div>
+      <div class="task-meta">
+        <div class="task-title">${t.title}</div>
+        <div class="task-sub">${t.description || ''} ${t.date ? '• ' + t.date : ''}</div>
+      </div>
+      <span class="task-badge ${TYPE_CLASSES[t.type] || 'badge-other'}">${TYPE_LABELS[t.type] || t.type}</span>
+      <span class="task-priority ${PRIORITY_CLASSES[t.priority] || ''}">${PRIORITY_LABELS[t.priority] || ''}</span>
+      <span class="status-tag ${STATUS_CLASSES[t.status] || ''}">${STATUS_LABELS[t.status] || ''}</span>
+      <button class="task-del" onclick="deleteTask('${t.id}')">🗑</button>
+    </div>
+  `).join('');
+}
+
+async function loadTasks() {
+  if (!supabase || SUPABASE_URL === 'YOUR_SUPABASE_URL') return;
+  const { data, error } = await supabase.from('tasks').select('*').order('created_at', { ascending: false });
+  if (data) { tasks = data; renderTasks(); }
+}
+
+// ============================================================
+// ACTIVITY
+// ============================================================
+async function saveActivity() {
+  const date = v('activityDate') || new Date().toISOString().split('T')[0];
+  const activity = {
+    date,
+    posts: n('act-posts'),
+    stories: n('act-stories'),
+    videos: n('act-videos'),
+    reels: n('act-reels'),
+    comments: n('act-comments'),
+    messages: n('act-messages'),
+    conversations: n('act-conversations'),
+    influencers: n('act-influencers'),
+    influencer_visits: n('act-influVisits'),
+    created_at: new Date().toISOString()
+  };
+
+  loading(true);
+  if (supabase && SUPABASE_URL !== 'YOUR_SUPABASE_URL') {
+    const { error } = await supabase.from('daily_activity').upsert([activity], { onConflict: 'date' });
+    if (error) { toast('خطأ: ' + error.message, 'error'); loading(false); return; }
+  }
+
+  activities = activities.filter(a => a.date !== date);
+  activities.unshift(activity);
+  renderActivityLog();
+  loading(false);
+  toast('✅ تم حفظ النشاط اليومي', 'success');
+}
+
+function renderActivityLog() {
+  const log = document.getElementById('activityLog');
+  if (activities.length === 0) {
+    log.innerHTML = '<div class="empty-state"><div class="empty-icon">📊</div><div class="empty-text">لا يوجد نشاط</div></div>';
+    return;
+  }
+  log.innerHTML = '<table class="data-table"><thead><tr>' +
+    '<th>التاريخ</th><th>بوستات</th><th>ستوريات</th><th>فيديو</th><th>ريلز</th><th>تعليقات</th><th>رسائل</th><th>مؤثرون</th>' +
+    '</tr></thead><tbody>' +
+    activities.slice(0, 14).map(a => `
+      <tr>
+        <td>${a.date}</td>
+        <td>${a.posts || 0}</td>
+        <td>${a.stories || 0}</td>
+        <td>${a.videos || 0}</td>
+        <td>${a.reels || 0}</td>
+        <td>${a.comments || 0}</td>
+        <td>${a.messages || 0}</td>
+        <td>${(a.influencers || 0) + (a.influencer_visits || 0)}</td>
+      </tr>
+    `).join('') +
+    '</tbody></table>';
+}
+
+async function loadActivityLog() {
+  if (!supabase || SUPABASE_URL === 'YOUR_SUPABASE_URL') return;
+  const { data } = await supabase.from('daily_activity').select('*').order('date', { ascending: false }).limit(14);
+  if (data) { activities = data; renderActivityLog(); }
+}
+
+// ============================================================
+// REPORT — KPI CALCULATOR
+// ============================================================
+function calculateKPIs(rd) {
+  const salesGrowth = rd.salesPrev > 0
+    ? Math.round(((rd.salesTotal - rd.salesPrev) / rd.salesPrev) * 100)
+    : 0;
+
+  const totalViews = (rd.ttViews || 0) + (rd.igImpressions || 0);
+  const totalEngagement = (rd.ttLikes || 0) + (rd.ttComments || 0) + (rd.ttShares || 0);
+  const campaignROI = rd.campSpend > 0 ? Math.round((rd.orders * rd.avgOrder) / rd.campSpend * 100) / 100 : 0;
+  const targetAchievement = rd.salesTarget > 0 ? Math.round((rd.salesTotal / rd.salesTarget) * 100) : 0;
+
+  return {
+    salesTotal: rd.salesTotal || 0,
+    salesGrowth,
+    orders: rd.orders || 0,
+    avgOrder: rd.avgOrder || 0,
+    salesTarget: rd.salesTarget || 0,
+    targetAchievement,
+    totalViews,
+    totalEngagement,
+    igReach: rd.igReach || 0,
+    igFollowers: rd.igFollowers || 0,
+    igEngagement: rd.igEngagement || 0,
+    ttViews: rd.ttViews || 0,
+    ttFollowers: rd.ttFollowers || 0,
+    gmViews: rd.gmViews || 0,
+    gmCalls: rd.gmCalls || 0,
+    gmRating: rd.gmRating || 0,
+    gmReviews: rd.gmReviews || 0,
+    influencers: rd.infContacted || 0,
+    infVisited: rd.infVisited || 0,
+    deliveryOrders: rd.delOrders || 0,
+    deliveryGrowth: rd.delGrowth || 0,
+    campSpend: rd.campSpend || 0,
+    campReach: rd.campReach || 0,
+    campaignROI,
+    posts: rd.posts || 0,
+    stories: rd.stories || 0,
+    videos: rd.videos || 0,
+    reels: rd.reels || 0
+  };
+}
+
+function collectReportData() {
+  return {
+    month: parseInt(v('rep-month')),
+    weekNumber: parseInt(v('rep-week')),
+    salesTotal: n('r-sales-total'),
+    salesPrev: n('r-sales-prev'),
+    orders: n('r-orders'),
+    avgOrder: n('r-avg-order'),
+    topProduct: v('r-top-product'),
+    salesTarget: n('r-sales-target'),
+    salesNotes: v('r-sales-notes'),
+    posts: n('r-posts'),
+    stories: n('r-stories'),
+    videos: n('r-videos'),
+    reels: n('r-reels'),
+    ttViews: n('r-tt-views'),
+    ttFollowers: n('r-tt-followers'),
+    ttLikes: n('r-tt-likes'),
+    ttComments: n('r-tt-comments'),
+    ttShares: n('r-tt-shares'),
+    ttTop: n('r-tt-top'),
+    igReach: n('r-ig-reach'),
+    igImpressions: n('r-ig-impressions'),
+    igFollowers: n('r-ig-followers'),
+    igEngagement: n('r-ig-engagement'),
+    igReelsEng: n('r-ig-reels-eng'),
+    igStoryViews: n('r-ig-story-views'),
+    gmViews: n('r-gm-views'),
+    gmDirect: n('r-gm-direct'),
+    gmDiscovery: n('r-gm-discovery'),
+    gmCalls: n('r-gm-calls'),
+    gmReviews: n('r-gm-reviews'),
+    gmRating: n('r-gm-rating'),
+    campSpend: n('r-camp-spend'),
+    campReach: n('r-camp-reach'),
+    campClicks: n('r-camp-clicks'),
+    campConv: n('r-camp-conv'),
+    campNotes: v('r-camp-notes'),
+    infContacted: n('r-inf-contacted'),
+    infVisited: n('r-inf-visited'),
+    infPosts: n('r-inf-posts'),
+    infReach: n('r-inf-reach'),
+    infNotes: v('r-inf-notes'),
+    delOrders: n('r-del-orders'),
+    delRating: n('r-del-rating'),
+    delGrowth: n('r-del-growth'),
+    delNotes: v('r-del-notes'),
+    achievements: v('r-achievements'),
+    notes: v('r-notes'),
+    nextPlan: v('r-next-plan')
+  };
+}
+
+async function saveReport(status) {
+  const rd = collectReportData();
+  const dashData = calculateKPIs(rd);
+
+  const payload = {
+    report_data: rd,
+    dashboard_data: dashData,
+    month: rd.month,
+    week_number: rd.weekNumber,
+    status,
+    created_at: new Date().toISOString()
+  };
+
+  loading(true);
+  let error = null;
+
+  if (supabase && SUPABASE_URL !== 'YOUR_SUPABASE_URL') {
+    let res;
+    if (currentReportId) {
+      res = await supabase.from('reports').update(payload).eq('id', currentReportId).select();
+    } else {
+      res = await supabase.from('reports').insert([payload]).select();
+      if (res.data) currentReportId = res.data[0].id;
+    }
+    error = res.error;
+  }
+
+  loading(false);
+  currentStatus = status;
+  updateStatusBadge(status);
+
+  if (error) {
+    toast('خطأ في الحفظ: ' + error.message, 'error');
+  } else {
+    const msg = status === 'published' ? '🚀 تم نشر التقرير للعميل!' : '✅ تم حفظ المسودة';
+    toast(msg, 'success');
   }
 }
 
-function handleAdminLogout() {
-  localStorage.removeItem(ADMIN_AUTH_KEY);
-  document.getElementById('adminLoginUsername').value = '';
-  document.getElementById('adminLoginPassword').value = '';
-  document.getElementById('adminLoginError').classList.remove('visible');
-  showAdminLogin();
+function saveDraft() { saveReport('draft'); }
+function publishReport() {
+  if (!confirm('هل تريد نشر هذا التقرير للعميل؟ سيكون مرئياً فوراً.')) return;
+  saveReport('published');
 }
 
-/* =============================================
-   CTRL+S
-   ============================================= */
-document.addEventListener('keydown', e => { if ((e.ctrlKey || e.metaKey) && e.key === 's') { e.preventDefault(); saveAll(); } });
+function updateStatusBadge(status) {
+  const badge = document.getElementById('repStatusBadge');
+  if (!badge) return;
+  const labels = { draft: 'مسودة', published: 'منشور', archived: 'مؤرشف' };
+  const colors = {
+    draft: 'background:#E3F2FD;color:#1565C0;border-color:#90CAF9',
+    published: 'background:#E8F5E9;color:#2E7D32;border-color:#C8E6C9',
+    archived: 'background:var(--bg3);color:var(--t2);border-color:var(--border)'
+  };
+  badge.textContent = labels[status] || status;
+  badge.style.cssText = colors[status] || '';
+}
 
-/* =============================================
-   INIT
-   ============================================= */
-document.addEventListener('DOMContentLoaded', () => {
-  checkAdminAuth();
+// ============================================================
+// HISTORY
+// ============================================================
+async function loadHistory() {
+  const list = document.getElementById('historyList');
+  list.innerHTML = '<div class="empty-state"><div class="spinner" style="margin:0 auto"></div></div>';
 
-  document.getElementById('adminLoginPassword').addEventListener('keydown', e => {
-    if (e.key === 'Enter') handleAdminLogin();
-  });
-  document.getElementById('adminLoginUsername').addEventListener('keydown', e => {
-    if (e.key === 'Enter') handleAdminLogin();
-  });
+  if (!supabase || SUPABASE_URL === 'YOUR_SUPABASE_URL') {
+    list.innerHTML = '<div class="empty-state"><div class="empty-icon">⚙️</div><div class="empty-text">يرجى إعداد Supabase أولاً</div><div class="empty-sub">أضف SUPABASE_URL و SUPABASE_KEY في الكود</div></div>';
+    return;
+  }
 
-  // Auto-trigger renders
-  calcSales(); calcContent(); calcTiktok(); calcGmaps();
-  // Load from localStorage
-  loadSavedData();
-  // On summary tab click, re-render
-  document.querySelectorAll('.sb-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      if (btn.textContent.includes('الملخص')) renderSummary();
-    });
-  });
+  const { data, error } = await supabase
+    .from('reports')
+    .select('id, month, week_number, status, created_at')
+    .order('created_at', { ascending: false });
+
+  if (error || !data) {
+    list.innerHTML = '<div class="empty-state"><div class="empty-icon">⚠️</div><div class="empty-text">تعذر تحميل السجل</div></div>';
+    return;
+  }
+
+  if (data.length === 0) {
+    list.innerHTML = '<div class="empty-state"><div class="empty-icon">🗂️</div><div class="empty-text">لا توجد تقارير بعد</div></div>';
+    return;
+  }
+
+  const months = ['','يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+  const statusBadge = (s) => {
+    const map = {
+      draft: '<span class="status-tag status-inprogress">مسودة</span>',
+      published: '<span class="status-tag status-done">منشور</span>',
+      archived: '<span class="status-tag" style="background:var(--bg3);color:var(--t2)">مؤرشف</span>'
+    };
+    return map[s] || s;
+  };
+
+  list.innerHTML = '<div class="section-card"><div class="section-body" style="padding:0"><table class="data-table"><thead><tr><th>الشهر</th><th>الأسبوع</th><th>الحالة</th><th>تاريخ الإنشاء</th><th>إجراءات</th></tr></thead><tbody>' +
+    data.map(r => `
+      <tr>
+        <td>${months[r.month] || r.month}</td>
+        <td>الأسبوع ${r.week_number}</td>
+        <td>${statusBadge(r.status)}</td>
+        <td>${new Date(r.created_at).toLocaleDateString('ar-SA')}</td>
+        <td style="display:flex;gap:6px">
+          <button class="btn btn-sm btn-outline" onclick="loadReport('${r.id}')">تحرير</button>
+          ${r.status !== 'published' ? '<button class="btn btn-sm btn-success" onclick="changeStatus(\''+r.id+'\',\'published\')">نشر</button>' : ''}
+          ${r.status === 'published' ? '<button class="btn btn-sm btn-amber" onclick="changeStatus(\''+r.id+'\',\'archived\')">أرشفة</button>' : ''}
+        </td>
+      </tr>
+    `).join('') +
+    '</tbody></table></div></div>';
+}
+
+async function changeStatus(id, newStatus) {
+  if (!supabase) return;
+  const { error } = await supabase.from('reports').update({ status: newStatus }).eq('id', id);
+  if (!error) { toast('✅ تم تغيير الحالة', 'success'); loadHistory(); }
+  else toast('خطأ: ' + error.message, 'error');
+}
+
+async function loadReport(id) {
+  if (!supabase) return;
+  loading(true);
+  const { data, error } = await supabase.from('reports').select('*').eq('id', id).single();
+  loading(false);
+
+  if (error || !data) { toast('تعذر تحميل التقرير', 'error'); return; }
+
+  currentReportId = data.id;
+  currentStatus = data.status;
+  const rd = data.report_data;
+
+  // Fill form fields
+  s('rep-month', rd.month); s('rep-week', rd.weekNumber);
+  s('r-sales-total', rd.salesTotal); s('r-sales-prev', rd.salesPrev);
+  s('r-orders', rd.orders); s('r-avg-order', rd.avgOrder);
+  s('r-top-product', rd.topProduct); s('r-sales-target', rd.salesTarget);
+  s('r-sales-notes', rd.salesNotes);
+  s('r-posts', rd.posts); s('r-stories', rd.stories);
+  s('r-videos', rd.videos); s('r-reels', rd.reels);
+  s('r-tt-views', rd.ttViews); s('r-tt-followers', rd.ttFollowers);
+  s('r-tt-likes', rd.ttLikes); s('r-tt-comments', rd.ttComments);
+  s('r-tt-shares', rd.ttShares); s('r-tt-top', rd.ttTop);
+  s('r-ig-reach', rd.igReach); s('r-ig-impressions', rd.igImpressions);
+  s('r-ig-followers', rd.igFollowers); s('r-ig-engagement', rd.igEngagement);
+  s('r-ig-reels-eng', rd.igReelsEng); s('r-ig-story-views', rd.igStoryViews);
+  s('r-gm-views', rd.gmViews); s('r-gm-direct', rd.gmDirect);
+  s('r-gm-discovery', rd.gmDiscovery); s('r-gm-calls', rd.gmCalls);
+  s('r-gm-reviews', rd.gmReviews); s('r-gm-rating', rd.gmRating);
+  s('r-camp-spend', rd.campSpend); s('r-camp-reach', rd.campReach);
+  s('r-camp-clicks', rd.campClicks); s('r-camp-conv', rd.campConv);
+  s('r-camp-notes', rd.campNotes);
+  s('r-inf-contacted', rd.infContacted); s('r-inf-visited', rd.infVisited);
+  s('r-inf-posts', rd.infPosts); s('r-inf-reach', rd.infReach);
+  s('r-inf-notes', rd.infNotes);
+  s('r-del-orders', rd.delOrders); s('r-del-rating', rd.delRating);
+  s('r-del-growth', rd.delGrowth); s('r-del-notes', rd.delNotes);
+  s('r-achievements', rd.achievements);
+  s('r-notes', rd.notes); s('r-next-plan', rd.nextPlan);
+
+  updateStatusBadge(data.status);
+  switchTab('report');
+  toast('✅ تم تحميل التقرير للتحرير');
+}
+
+// ============================================================
+// INIT
+// ============================================================
+document.addEventListener('DOMContentLoaded', async () => {
+  // Set defaults
+  const now = new Date();
+  s('rep-month', now.getMonth() + 1);
+  s('activityDate', now.toISOString().split('T')[0]);
+
+  // Init supabase
+  const ok = await initSupabase();
+
+  if (ok) {
+    await loadTasks();
+    await loadActivityLog();
+  }
 });
 </script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </body>
 </html>
