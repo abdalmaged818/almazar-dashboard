@@ -5,1386 +5,624 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>إدارة التسويق — مطعم المزار الدمشقي</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap');
+:root{
+  --bg:#FFFFFF;--bg2:#F7F5F2;--bg3:#F5F2EE;--card:#E8E1D9;
+  --br:#8B3A2B;--brh:#7A3225;--brl:#A65A4A;--olive:#6F7F6A;
+  --green:#2E7D32;--gsoft:#E8F5E9;--red:#C62828;--amber:#F9A825;--blue:#1565C0;
+  --t1:#1F1F1F;--t2:#6B6B6B;--border:#EAE6E1;
+  --sh1:0 1px 4px rgba(0,0,0,.06);--sh2:0 4px 16px rgba(0,0,0,.09);--sh3:0 8px 32px rgba(0,0,0,.11);
+  --r:12px;--font:'IBM Plex Sans Arabic',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font);background:var(--bg2);color:var(--t1);min-height:100vh;direction:rtl}
 
-  :root {
-    --bg-main: #FFFFFF;
-    --bg-secondary: #F7F5F2;
-    --bg-beige: #F5F2EE;
-    --card-beige: #E8E1D9;
-    --brown-primary: #8B3A2B;
-    --brown-hover: #7A3225;
-    --brown-light: #A65A4A;
-    --olive: #6F7F6A;
-    --green-success: #2E7D32;
-    --green-soft: #E8F5E9;
-    --red-negative: #C62828;
-    --amber-warning: #F9A825;
-    --blue-info: #1565C0;
-    --text-main: #1F1F1F;
-    --text-secondary: #6B6B6B;
-    --border: #EAE6E1;
-    --shadow-sm: 0 1px 4px rgba(0,0,0,0.06);
-    --shadow-md: 0 4px 16px rgba(0,0,0,0.08);
-    --shadow-lg: 0 8px 32px rgba(0,0,0,0.10);
-    --radius-sm: 8px;
-    --radius-md: 14px;
-    --radius-lg: 20px;
-    --font: 'IBM Plex Sans Arabic', 'Segoe UI', Tahoma, sans-serif;
-  }
+/* HEADER */
+.header{
+  background:linear-gradient(135deg,var(--br) 0%,#6B2A1E 100%);
+  color:#fff;padding:0 32px;
+  display:flex;align-items:center;justify-content:space-between;
+  height:68px;position:sticky;top:0;z-index:100;
+  box-shadow:0 2px 20px rgba(139,58,43,.3);
+}
+.header-brand{display:flex;align-items:center;gap:12px}
+.header-brand img{height:40px;border-radius:8px;border:2px solid rgba(255,255,255,.3)}
+.brand-text h1{font-size:16px;font-weight:700;line-height:1.2}
+.brand-text p{font-size:11px;opacity:.75;margin-top:2px}
+.header-right{display:flex;align-items:center;gap:10px}
+.live-badge{
+  display:flex;align-items:center;gap:6px;
+  background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);
+  padding:5px 12px;border-radius:20px;font-size:12px;font-weight:500;
+}
+.live-dot{width:8px;height:8px;border-radius:50%;background:#4CAF50;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+/* PERIOD SELECTOR */
+.period-bar{
+  background:#fff;border-bottom:1px solid var(--border);
+  padding:14px 32px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+  position:sticky;top:68px;z-index:90;box-shadow:var(--sh1);
+}
+.period-bar label{font-size:12px;font-weight:600;color:var(--t2);white-space:nowrap}
+.period-select{
+  padding:7px 12px;border:1.5px solid var(--border);border-radius:8px;
+  font-family:var(--font);font-size:13px;color:var(--t1);background:#fff;
+  outline:none;cursor:pointer;direction:rtl;
+}
+.period-select:focus{border-color:var(--br)}
+.report-date{font-size:12px;color:var(--t2);margin-right:auto}
 
-  body {
-    font-family: var(--font);
-    background: var(--bg-secondary);
-    color: var(--text-main);
-    direction: rtl;
-    font-size: 15px;
-    line-height: 1.7;
-  }
+/* MAIN CONTENT */
+.main{padding:28px 32px;max-width:1200px;margin:0 auto}
 
-  /* ===== HEADER ===== */
-  .site-header {
-    background: var(--bg-main);
-    border-bottom: 1px solid var(--border);
-    padding: 28px 40px;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    box-shadow: var(--shadow-sm);
-  }
+/* KPI HERO */
+.kpi-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:16px;
+  margin-bottom:28px;
+}
+.kpi-card{
+  background:#fff;border-radius:var(--r);border:1px solid var(--border);
+  padding:20px;transition:all .25s;cursor:default;
+  position:relative;overflow:hidden;
+}
+.kpi-card::before{
+  content:'';position:absolute;top:0;right:0;
+  width:4px;height:100%;background:var(--br);
+  border-radius:0 var(--r) var(--r) 0;
+}
+.kpi-card:hover{box-shadow:var(--sh2);transform:translateY(-2px)}
+.kpi-icon{font-size:26px;margin-bottom:10px}
+.kpi-val{font-size:32px;font-weight:700;color:var(--t1);line-height:1}
+.kpi-label{font-size:12px;color:var(--t2);margin-top:6px;font-weight:500}
+.kpi-trend{
+  display:inline-flex;align-items:center;gap:4px;
+  margin-top:8px;font-size:12px;font-weight:600;
+  padding:3px 8px;border-radius:12px;
+}
+.trend-up{background:var(--gsoft);color:var(--green)}
+.trend-down{background:#FFEBEE;color:var(--red)}
+.trend-neutral{background:var(--bg3);color:var(--t2)}
 
-  .header-inner {
-    max-width: 1400px;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    gap: 24px;
-  }
+/* SECTION CARD */
+.card{
+  background:#fff;border-radius:var(--r);border:1px solid var(--border);
+  box-shadow:var(--sh1);margin-bottom:20px;overflow:hidden;
+}
+.card-head{
+  display:flex;align-items:center;gap:10px;
+  padding:16px 22px;border-bottom:1px solid var(--border);
+  background:#fff;
+}
+.card-icon{
+  width:34px;height:34px;border-radius:8px;
+  background:var(--bg3);display:flex;align-items:center;justify-content:center;
+  font-size:18px;flex-shrink:0;
+}
+.card-title{font-size:14px;font-weight:600;color:var(--t1)}
+.card-sub{font-size:12px;color:var(--t2);margin-top:2px}
+.card-body{padding:22px}
 
-  .logo-placeholder {
-    width: 72px;
-    height: 72px;
-    border-radius: var(--radius-md);
-    background: var(--bg-beige);
-    border: 2px dashed var(--card-beige);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    color: var(--text-secondary);
-    font-size: 11px;
-    text-align: center;
-    cursor: pointer;
-    transition: border-color 0.2s;
-  }
-  .logo-placeholder:hover { border-color: var(--brown-light); }
-  .logo-placeholder svg { display: block; margin: 0 auto 2px; }
+/* STATS ROW */
+.stats-row{display:flex;gap:0;border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.stat-item{
+  flex:1;text-align:center;padding:16px 12px;
+  border-left:1px solid var(--border);
+}
+.stat-item:last-child{border-left:none}
+.stat-val{font-size:22px;font-weight:700;color:var(--br)}
+.stat-lbl{font-size:11px;color:var(--t2);margin-top:4px;font-weight:500}
 
+/* PROGRESS BAR */
+.progress-wrap{margin-bottom:14px}
+.progress-head{display:flex;justify-content:space-between;margin-bottom:6px;font-size:12px}
+.progress-label{font-weight:500;color:var(--t1)}
+.progress-val{color:var(--t2)}
+.progress-track{height:8px;background:var(--bg3);border-radius:4px;overflow:hidden}
+.progress-fill{height:100%;border-radius:4px;background:var(--br);transition:width .8s ease}
+.progress-fill.green{background:var(--green)}
+.progress-fill.amber{background:var(--amber)}
+.progress-fill.blue{background:var(--blue)}
 
-  .logo-container {
-    width: 72px;
-    height: 72px;
-    border-radius: var(--radius-md);
-    overflow: hidden;
-    background: var(--bg-beige);
-    border: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    box-shadow: var(--shadow-sm);
-  }
+/* CONTENT GRID */
+.content-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.content-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px}
 
-  .logo-img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    display: block;
-    padding: 6px;
-  }
+/* TEXT BLOCK */
+.text-block{
+  background:var(--bg3);border-radius:10px;padding:20px;
+  line-height:1.8;font-size:14px;color:var(--t1);
+  white-space:pre-wrap;border-right:3px solid var(--br);
+}
+.text-block.green{border-right-color:var(--green)}
+.text-block.amber{border-right-color:var(--amber)}
 
-  .logo-container:hover {
-    transform: scale(1.03);
-    transition: transform 0.2s ease;
-  }
+/* ACHIEVEMENT LIST */
+.achievement-list{display:flex;flex-direction:column;gap:10px}
+.achievement-item{
+  display:flex;align-items:flex-start;gap:12px;
+  padding:12px 16px;background:var(--gsoft);
+  border-radius:8px;border:1px solid #c8e6c9;
+}
+.ach-icon{font-size:20px;flex-shrink:0}
+.ach-text{font-size:13px;color:var(--t1);line-height:1.5}
 
-  .header-text { flex: 1; }
+/* LOADING */
+#loadingState{
+  display:flex;align-items:center;justify-content:center;
+  min-height:60vh;flex-direction:column;gap:16px;
+}
+.spinner{
+  width:44px;height:44px;border:3px solid var(--border);
+  border-top-color:var(--br);border-radius:50%;animation:spin .8s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+#loadingState p{font-size:14px;color:var(--t2);font-weight:500}
 
-  .header-title {
-    font-size: 20px;
-    font-weight: 700;
-    color: var(--brown-primary);
-    letter-spacing: -0.3px;
-  }
+/* EMPTY */
+.empty-rep{
+  text-align:center;padding:60px 20px;
+}
+.empty-rep .big-icon{font-size:56px;margin-bottom:16px}
+.empty-rep h2{font-size:18px;font-weight:600;color:var(--t1);margin-bottom:8px}
+.empty-rep p{font-size:14px;color:var(--t2)}
 
-  .header-sub {
-    font-size: 13px;
-    color: var(--text-secondary);
-    margin-top: 2px;
-  }
+/* NUMBER FORMAT */
+.num{font-feature-settings:"tnum"}
 
-  .header-meta {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-top: 6px;
-    flex-wrap: wrap;
-  }
+/* FOOTER */
+.footer{
+  text-align:center;padding:24px;color:var(--t2);
+  font-size:12px;border-top:1px solid var(--border);
+  margin-top:40px;
+}
 
-  .period-tag {
-    font-size: 12px;
-    background: var(--bg-beige);
-    border: 1px solid var(--border);
-    color: var(--text-secondary);
-    padding: 3px 12px;
-    border-radius: 20px;
-  }
-
-  .status-badge {
-    font-size: 11px;
-    font-weight: 600;
-    background: #FFF8E1;
-    color: #B45309;
-    border: 1px solid #FBBF24;
-    padding: 3px 12px;
-    border-radius: 20px;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-  }
-  .status-badge::before {
-    content: '';
-    width: 6px; height: 6px;
-    background: var(--amber-warning);
-    border-radius: 50%;
-    animation: pulse 1.5s infinite;
-  }
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.4; }
-  }
-
-  /* ===== MAIN WRAPPER ===== */
-  .main {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 32px 40px 60px;
-  }
-
-  /* ===== SUMMARY CARD ===== */
-  .summary-card {
-    background: linear-gradient(135deg, #FDF9F7 0%, #F5EFE9 100%);
-    border: 1px solid var(--border);
-    border-right: 4px solid var(--brown-primary);
-    border-radius: var(--radius-md);
-    padding: 24px 28px;
-    margin-bottom: 32px;
-    box-shadow: var(--shadow-sm);
-  }
-  .summary-label {
-    font-size: 11px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    color: var(--brown-light);
-    margin-bottom: 10px;
-  }
-  .summary-text {
-    font-size: 15px;
-    color: var(--text-main);
-    line-height: 1.9;
-  }
-
-  /* ===== KPI GRID ===== */
-  .section-title {
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--brown-primary);
-    margin-bottom: 16px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .section-title::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--border);
-  }
-
-  .kpi-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    gap: 16px;
-    margin-bottom: 36px;
-  }
-
-  .kpi-card {
-    background: var(--bg-main);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    padding: 20px;
-    transition: transform 0.2s, box-shadow 0.2s;
-    box-shadow: var(--shadow-sm);
-    position: relative;
-    overflow: hidden;
-  }
-  .kpi-card::before {
-    content: '';
-    position: absolute;
-    top: 0; right: 0;
-    width: 3px; height: 100%;
-    background: var(--brown-primary);
-    opacity: 0;
-    transition: opacity 0.2s;
-  }
-  .kpi-card:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
-  }
-  .kpi-card:hover::before { opacity: 1; }
-
-  .kpi-label {
-    font-size: 12px;
-    color: var(--text-secondary);
-    margin-bottom: 8px;
-    font-weight: 500;
-  }
-  .kpi-value {
-    font-size: 26px;
-    font-weight: 700;
-    color: var(--text-main);
-    letter-spacing: -0.5px;
-    line-height: 1.2;
-  }
-  .kpi-value.positive { color: var(--green-success); }
-  .kpi-value.negative { color: var(--red-negative); }
-  .kpi-value.brown { color: var(--brown-primary); }
-
-  /* ===== TABS ===== */
-  .tabs-wrapper {
-    background: var(--bg-main);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-    box-shadow: var(--shadow-sm);
-  }
-
-  .tabs-nav {
-    display: flex;
-    overflow-x: auto;
-    background: var(--bg-beige);
-    border-bottom: 1px solid var(--border);
-    padding: 0 8px;
-    gap: 2px;
-    scrollbar-width: none;
-  }
-  .tabs-nav::-webkit-scrollbar { display: none; }
-
-  .tab-btn {
-    flex-shrink: 0;
-    padding: 14px 18px;
-    font-family: var(--font);
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--text-secondary);
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    border-bottom: 2px solid transparent;
-    transition: color 0.2s, border-color 0.2s, background 0.2s;
-    white-space: nowrap;
-    margin-bottom: -1px;
-  }
-  .tab-btn:hover {
-    color: var(--brown-primary);
-    background: rgba(139, 58, 43, 0.05);
-  }
-  .tab-btn.active {
-    color: var(--brown-primary);
-    border-bottom-color: var(--brown-primary);
-    font-weight: 700;
-    background: var(--bg-main);
-  }
-
-  .tab-content { display: none; padding: 32px; animation: fadeIn 0.25s ease; }
-  .tab-content.active { display: block; }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
-
-  /* ===== INSIGHT CARD ===== */
-  .insight-card {
-    background: linear-gradient(135deg, #F0F7F0 0%, #E8F5E9 100%);
-    border: 1px solid #C8E6C9;
-    border-right: 4px solid var(--green-success);
-    border-radius: var(--radius-md);
-    padding: 20px 24px;
-    margin-top: 24px;
-  }
-  .insight-card.amber {
-    background: linear-gradient(135deg, #FFFDE7 0%, #FFF8E1 100%);
-    border-color: #FFE082;
-    border-right-color: var(--amber-warning);
-  }
-  .insight-card.blue {
-    background: linear-gradient(135deg, #E3F2FD 0%, #E8F4FD 100%);
-    border-color: #BBDEFB;
-    border-right-color: var(--blue-info);
-  }
-  .insight-card.brown {
-    background: linear-gradient(135deg, #FDF8F6 0%, #F5EDE9 100%);
-    border-color: #E8C4B8;
-    border-right-color: var(--brown-primary);
-  }
-  .insight-title {
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--green-success);
-    margin-bottom: 8px;
-  }
-  .insight-card.amber .insight-title { color: #B45309; }
-  .insight-card.blue .insight-title { color: var(--blue-info); }
-  .insight-card.brown .insight-title { color: var(--brown-primary); }
-  .insight-text { font-size: 14px; color: var(--text-main); line-height: 1.8; }
-
-  /* ===== TABLES ===== */
-  .table-wrap {
-    overflow-x: auto;
-    border-radius: var(--radius-md);
-    border: 1px solid var(--border);
-    box-shadow: var(--shadow-sm);
-  }
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 13.5px;
-  }
-  thead th {
-    background: var(--bg-beige);
-    color: var(--text-secondary);
-    font-weight: 600;
-    font-size: 12px;
-    padding: 13px 16px;
-    text-align: right;
-    border-bottom: 1px solid var(--border);
-    white-space: nowrap;
-  }
-  tbody tr {
-    border-bottom: 1px solid var(--border);
-    transition: background 0.15s;
-  }
-  tbody tr:last-child { border-bottom: none; }
-  tbody tr:hover { background: var(--bg-beige); }
-  tbody td {
-    padding: 13px 16px;
-    color: var(--text-main);
-    vertical-align: middle;
-  }
-  tbody tr.total-row {
-    background: var(--bg-beige);
-    font-weight: 700;
-  }
-  .cell-positive { color: var(--green-success); font-weight: 600; }
-  .cell-negative { color: var(--red-negative); font-weight: 600; }
-  .cell-neutral { color: var(--text-secondary); }
-  .cell-brown { color: var(--brown-primary); font-weight: 600; }
-  .cell-pending {
-    color: var(--amber-warning);
-    font-weight: 600;
-    font-size: 12px;
-  }
-
-  /* ===== MINI CARDS GRID ===== */
-  .mini-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 14px;
-    margin-bottom: 24px;
-  }
-  .mini-card {
-    background: var(--bg-main);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    padding: 18px 20px;
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    transition: box-shadow 0.2s;
-    box-shadow: var(--shadow-sm);
-  }
-  .mini-card:hover { box-shadow: var(--shadow-md); }
-  .mini-icon {
-    width: 40px; height: 40px;
-    border-radius: var(--radius-sm);
-    background: var(--bg-beige);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 18px;
-    flex-shrink: 0;
-  }
-  .mini-label { font-size: 12px; color: var(--text-secondary); margin-bottom: 3px; }
-  .mini-value { font-size: 17px; font-weight: 700; color: var(--text-main); }
-  .mini-value.success { color: var(--green-success); }
-  .mini-value.brown { color: var(--brown-primary); }
-
-  /* ===== WEEK CARDS ===== */
-  .week-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-    gap: 16px;
-    margin-bottom: 24px;
-  }
-  .week-card {
-    background: var(--bg-main);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    padding: 20px;
-    box-shadow: var(--shadow-sm);
-    transition: transform 0.2s;
-  }
-  .week-card:hover { transform: translateY(-2px); }
-  .week-number {
-    font-size: 12px;
-    font-weight: 700;
-    color: var(--brown-primary);
-    margin-bottom: 6px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
-  .week-dates {
-    font-size: 13px;
-    color: var(--text-secondary);
-    margin-bottom: 12px;
-  }
-  .week-status {
-    display: inline-block;
-    font-size: 11px;
-    font-weight: 600;
-    padding: 3px 12px;
-    border-radius: 20px;
-  }
-  .week-status.done {
-    background: var(--green-soft);
-    color: var(--green-success);
-    border: 1px solid #A5D6A7;
-  }
-  .week-status.pending {
-    background: #FFF8E1;
-    color: #B45309;
-    border: 1px solid #FBBF24;
-  }
-
-  /* ===== BEST VIDEO CARD ===== */
-  .best-video-card {
-    background: linear-gradient(135deg, #FDF8F6 0%, #F5EDE9 100%);
-    border: 1px solid var(--card-beige);
-    border-radius: var(--radius-md);
-    padding: 24px;
-    margin-top: 20px;
-  }
-  .best-video-title {
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--brown-primary);
-    margin-bottom: 16px;
-    padding-bottom: 12px;
-    border-bottom: 1px solid var(--border);
-  }
-  .video-meta-row {
-    display: flex;
-    gap: 32px;
-    flex-wrap: wrap;
-    margin-bottom: 14px;
-  }
-  .video-meta-item { }
-  .video-meta-key { font-size: 11px; color: var(--text-secondary); margin-bottom: 3px; font-weight: 500; }
-  .video-meta-val { font-size: 18px; font-weight: 700; color: var(--text-main); }
-
-  /* ===== NOTE CARDS ===== */
-  .notes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
-  .note-card {
-    background: var(--bg-main);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    padding: 20px;
-    box-shadow: var(--shadow-sm);
-  }
-  .note-tag {
-    display: inline-block;
-    font-size: 11px;
-    font-weight: 700;
-    padding: 3px 10px;
-    border-radius: 20px;
-    margin-bottom: 12px;
-  }
-  .note-tag.marketing { background: #E3F2FD; color: var(--blue-info); }
-  .note-tag.ops { background: #FFF8E1; color: #B45309; }
-  .note-tag.platforms { background: var(--green-soft); color: var(--green-success); }
-  .note-tag.sales { background: #F3E5F5; color: #6A1B9A; }
-  .note-text { font-size: 14px; color: var(--text-main); line-height: 1.8; }
-
-  /* ===== ACTION PLAN CARDS ===== */
-  .plan-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
-  .plan-card {
-    background: var(--bg-main);
-    border: 1px solid var(--border);
-    border-top: 3px solid var(--brown-primary);
-    border-radius: var(--radius-md);
-    padding: 22px;
-    box-shadow: var(--shadow-sm);
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
-  .plan-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
-  .plan-icon { font-size: 24px; margin-bottom: 12px; }
-  .plan-name { font-size: 15px; font-weight: 700; color: var(--brown-primary); margin-bottom: 10px; }
-  .plan-text { font-size: 13.5px; color: var(--text-secondary); line-height: 1.8; }
-
-  /* ===== STATUS CHIPS ===== */
-  .chip-done {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    font-size: 12px;
-    font-weight: 600;
-    background: var(--green-soft);
-    color: var(--green-success);
-    padding: 4px 12px;
-    border-radius: 20px;
-    border: 1px solid #A5D6A7;
-  }
-  .chip-done::before { content: '✓'; }
-
-  /* ===== FOOTER ===== */
-  .site-footer {
-    text-align: center;
-    padding: 28px 40px;
-    font-size: 12px;
-    color: var(--text-secondary);
-    border-top: 1px solid var(--border);
-    background: var(--bg-main);
-    margin-top: 48px;
-  }
-
-  /* ===== RESPONSIVE ===== */
-  @media (max-width: 768px) {
-    .site-header { padding: 20px 20px; }
-    .main { padding: 20px 16px 40px; }
-    .header-title { font-size: 16px; }
-    .kpi-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-    .kpi-value { font-size: 20px; }
-    .tab-content { padding: 20px 16px; }
-    .week-grid { grid-template-columns: 1fr 1fr; }
-    .notes-grid, .plan-grid { grid-template-columns: 1fr; }
-    .mini-grid { grid-template-columns: 1fr 1fr; }
-  }
-  @media (max-width: 480px) {
-    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
-    .week-grid { grid-template-columns: 1fr; }
-    .mini-grid { grid-template-columns: 1fr; }
-    .header-inner { gap: 14px; }
-    .logo-placeholder { width: 52px; height: 52px; }
-  }
-
-  /* ===== LOGIN SCREEN ===== */
-  .login-screen {
-    position: fixed;
-    inset: 0;
-    z-index: 9999;
-    background: var(--bg-secondary);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    background-image: radial-gradient(circle at 20% 80%, rgba(139,58,43,0.05) 0%, transparent 50%),
-                      radial-gradient(circle at 80% 20%, rgba(111,127,106,0.05) 0%, transparent 50%);
-  }
-  .login-card {
-    background: var(--bg-main);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 44px 40px 36px;
-    width: 100%;
-    max-width: 400px;
-    box-shadow: var(--shadow-lg);
-    text-align: center;
-    animation: loginSlideIn 0.35s ease;
-  }
-  @keyframes loginSlideIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  .login-logo {
-    width: 68px;
-    height: 68px;
-    border-radius: var(--radius-md);
-    background: var(--bg-beige);
-    border: 2px dashed var(--card-beige);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 24px;
-    color: var(--text-secondary);
-    font-size: 10px;
-  }
-  .login-logo svg { display: block; margin: 0 auto 3px; }
-
-  .login-logo .logo-img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    padding: 6px;
-  }
-  .login-title {
-    font-size: 22px;
-    font-weight: 700;
-    color: var(--brown-primary);
-    margin-bottom: 6px;
-    letter-spacing: -0.3px;
-  }
-  .login-subtitle {
-    font-size: 12.5px;
-    color: var(--text-secondary);
-    margin-bottom: 32px;
-    line-height: 1.6;
-  }
-  .login-form {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    text-align: right;
-  }
-  .login-input {
-    width: 100%;
-    padding: 13px 16px;
-    font-family: var(--font);
-    font-size: 14px;
-    color: var(--text-main);
-    background: var(--bg-beige);
-    border: 1.5px solid var(--border);
-    border-radius: var(--radius-sm);
-    outline: none;
-    direction: rtl;
-    transition: border-color 0.2s, box-shadow 0.2s;
-  }
-  .login-input::placeholder { color: var(--text-secondary); }
-  .login-input:focus {
-    border-color: var(--brown-light);
-    box-shadow: 0 0 0 3px rgba(139,58,43,0.08);
-    background: var(--bg-main);
-  }
-  .login-button {
-    width: 100%;
-    padding: 14px;
-    font-family: var(--font);
-    font-size: 15px;
-    font-weight: 700;
-    color: #fff;
-    background: var(--brown-primary);
-    border: none;
-    border-radius: var(--radius-sm);
-    cursor: pointer;
-    margin-top: 4px;
-    transition: background 0.2s, transform 0.1s;
-    letter-spacing: 0.3px;
-  }
-  .login-button:hover { background: var(--brown-hover); }
-  .login-button:active { transform: scale(0.98); }
-  .login-error {
-    font-size: 13px;
-    color: var(--red-negative);
-    background: #FFEBEE;
-    border: 1px solid #FFCDD2;
-    border-radius: var(--radius-sm);
-    padding: 10px 14px;
-    display: none;
-    text-align: center;
-  }
-  .login-error.visible { display: block; animation: shake 0.35s ease; }
-  @keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    25%       { transform: translateX(-6px); }
-    75%       { transform: translateX(6px); }
-  }
-  .login-footer-text {
-    font-size: 11px;
-    color: var(--text-secondary);
-    margin-top: 28px;
-    opacity: 0.7;
-  }
-
-  /* ===== LOGOUT BUTTON ===== */
-  .logout-button {
-    flex-shrink: 0;
-    padding: 8px 16px;
-    font-family: var(--font);
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--brown-primary);
-    background: var(--bg-beige);
-    border: 1.5px solid var(--border);
-    border-radius: 20px;
-    cursor: pointer;
-    transition: background 0.2s, border-color 0.2s, color 0.2s;
-    white-space: nowrap;
-  }
-  .logout-button:hover {
-    background: var(--brown-primary);
-    border-color: var(--brown-primary);
-    color: #fff;
-  }
+@media(max-width:900px){
+  .kpi-grid{grid-template-columns:1fr 1fr}
+  .content-grid,.content-grid-3{grid-template-columns:1fr}
+  .header,.period-bar,.main{padding-left:16px;padding-right:16px}
+  .stats-row{flex-wrap:wrap}
+  .stat-item{min-width:50%;border-bottom:1px solid var(--border)}
+}
+@media(max-width:480px){
+  .kpi-grid{grid-template-columns:1fr}
+}
 </style>
 </head>
 <body>
 
-<!-- ===== LOGIN SCREEN ===== -->
-<div id="loginScreen" class="login-screen">
-  <div class="login-card">
-    <div class="login-logo">
-      <img src="logo.png" alt="شعار المزار الدمشقي" class="logo-img">
+<!-- HEADER -->
+<header class="header">
+  <div class="header-brand">
+    <img src="logo.png" alt="المزار">
+    <div class="brand-text">
+      <h1>المزار الدمشقي</h1>
+      <p>تقرير أداء التسويق</p>
     </div>
-    <div class="login-title">تسجيل الدخول</div>
-    <div class="login-subtitle">لوحة إدارة التسويق — مطعم المزار الدمشقي</div>
-    <div class="login-form">
-      <input id="loginUsername" class="login-input" type="text" placeholder="اسم المستخدم" autocomplete="username" />
-      <input id="loginPassword" class="login-input" type="password" placeholder="كلمة المرور" autocomplete="current-password" />
-      <div id="loginError" class="login-error">بيانات الدخول غير صحيحة</div>
-      <button class="login-button" onclick="handleLogin()">دخول</button>
-    </div>
-    <div class="login-footer-text">خاص بإدارة مطعم المزار الدمشقي</div>
   </div>
-</div>
-
-<!-- ===== DASHBOARD APP ===== -->
-<div id="dashboardApp" style="display:none">
-
-<!-- ===== HEADER ===== -->
-<header class="site-header">
-  <div class="header-inner">
-    <div class="logo-container" title="شعار المزار الدمشقي">
-      <img src="logo.png" alt="شعار المزار الدمشقي" class="logo-img">
-    </div>
-    <div class="header-text">
-      <div class="header-title">إدارة التسويق — مطعم المزار الدمشقي</div>
-      <div class="header-sub">لوحة متابعة الأداء التسويقي والمبيعات</div>
-      <div class="header-meta">
-        <span class="period-tag">تقرير شهر أبريل 2026</span>
-        <span class="status-badge">قيد التحديث الأسبوعي</span>
-      </div>
-    </div>
-    <button class="logout-button" onclick="handleLogout()">تسجيل الخروج</button>
+  <div class="header-right">
+    <div class="live-badge"><div class="live-dot"></div><span>مباشر</span></div>
   </div>
 </header>
 
-<!-- ===== MAIN ===== -->
-<main class="main">
+<!-- PERIOD SELECTOR -->
+<div class="period-bar">
+  <label>الشهر:</label>
+  <select class="period-select" id="selMonth" onchange="loadReport()">
+    <option value="1">يناير</option><option value="2">فبراير</option>
+    <option value="3">مارس</option><option value="4">أبريل</option>
+    <option value="5">مايو</option><option value="6">يونيو</option>
+    <option value="7">يوليو</option><option value="8">أغسطس</option>
+    <option value="9">سبتمبر</option><option value="10">أكتوبر</option>
+    <option value="11">نوفمبر</option><option value="12">ديسمبر</option>
+  </select>
+  <label>الأسبوع:</label>
+  <select class="period-select" id="selWeek" onchange="loadReport()">
+    <option value="1">الأسبوع 1</option>
+    <option value="2">الأسبوع 2</option>
+    <option value="3">الأسبوع 3</option>
+    <option value="4">الأسبوع 4</option>
+  </select>
+  <span class="report-date" id="reportDateLabel"></span>
+</div>
 
-  <!-- SUMMARY -->
-  <div class="summary-card">
-    <div class="summary-label">الملخص التنفيذي</div>
-    <div class="summary-text" id="summaryText"></div>
+<!-- MAIN -->
+<main class="main" id="mainContent">
+  <div id="loadingState">
+    <div class="spinner"></div>
+    <p>جارٍ تحميل التقرير...</p>
   </div>
-
-  <!-- KPI CARDS -->
-  <div class="section-title">المؤشرات الرئيسية</div>
-  <div class="kpi-grid" id="kpiGrid"></div>
-
-  <!-- TABS -->
-  <div class="tabs-wrapper">
-    <nav class="tabs-nav" id="tabsNav"></nav>
-    <div id="tabsContainer"></div>
-  </div>
-
 </main>
 
 <!-- FOOTER -->
-<footer class="site-footer">
-  إعداد إدارة التسويق — مطعم المزار الدمشقي
+<footer class="footer">
+  <p>نظام إدارة التسويق — المزار الدمشقي &nbsp;|&nbsp; تحديث تلقائي من لوحة الإدارة</p>
 </footer>
 
-</div><!-- end #dashboardApp -->
-
 <script>
-/* ==========================================
-   DASHBOARD DATA — Edit this object to update
-   ========================================== */
-const dashboardData = {
-  summary: "يعرض هذا التقرير أداء التسويق لمطعم المزار الدمشقي خلال شهر أبريل، مع متابعة أسبوعية للمبيعات، المحتوى، المنصات، الحملات، المعلنين، قوقل ماب، وتطبيقات التوصيل. الهدف من هذه اللوحة هو تحويل الأرقام إلى قرارات واضحة تساعد الإدارة على فهم أثر التسويق واتجاه النمو والخطوات القادمة.",
+// ============================================================
+// SUPABASE CONFIG
+// ============================================================
+const SUPABASE_URL = 'YOUR_SUPABASE_URL';
+const SUPABASE_KEY = 'YOUR_SUPABASE_PUBLISHABLE_KEY';
 
-  kpis: [
-    { label: "إجمالي المشاهدات",    value: "1,100,000", type: "" },
-    { label: "إجمالي التفاعل",       value: "28,920",    type: "" },
-    { label: "إجمالي الفيديوهات",    value: "71",        type: "" },
-    { label: "عدد الستوري",          value: "204",       type: "" },
-    { label: "عدد المعلنين",         value: "32",        type: "" },
-    { label: "عدد الحملات",          value: "2",         type: "" },
-    { label: "التقييمات الجديدة",    value: "339",       type: "" },
-    { label: "نمو المبيعات",         value: "+25.1%",    type: "positive" },
-    { label: "نمو الفواتير",         value: "+23.5%",    type: "positive" },
-    { label: "متوسط الفاتورة",       value: "70 ريال",   type: "brown" },
-    { label: "أعلى فيديو مشاهدة",   value: "168,000",   type: "" },
-    { label: "أعلى حملة مشاهدة",    value: "271,000",   type: "" },
-  ],
+let supabase = null;
+let currentData = null;
 
-  weeks: [
-    { num: "الأسبوع الأول",   dates: "1 أبريل - 9 أبريل",   status: "مكتمل",     done: true },
-    { num: "الأسبوع الثاني",  dates: "10 أبريل - 16 أبريل", status: "مكتمل",     done: true },
-    { num: "الأسبوع الثالث",  dates: "17 أبريل - 23 أبريل", status: "مكتمل",     done: true },
-    { num: "الأسبوع الرابع",  dates: "24 أبريل - 30 أبريل", status: "قيد التنفيذ", done: false },
-  ],
-
-  sales: {
-    rows: [
-      { indicator: "إجمالي المبيعات (ريال)", prev: "572,887", current: "716,424", diff: "+143,537", growth: "+25.1%" },
-      { indicator: "عدد الفواتير",           prev: "8,182",   current: "10,107",  diff: "+1,925",  growth: "+23.5%" },
-      { indicator: "متوسط قيمة الفاتورة",   prev: "70 ريال", current: "70 ريال", diff: "ثابت",   growth: "—"      },
-    ],
-    insight: "ارتفعت المبيعات وعدد الفواتير خلال الفترة التسويقية، مما يشير إلى أن الأنشطة التسويقية لم تكن مؤثرة على الظهور فقط، بل انعكست أيضًا على الحركة الشرائية داخل المطعم."
-  },
-
-  content: {
-    cards: [
-      { icon: "🎬", label: "عدد الفيديوهات",     value: "71"  },
-      { icon: "🌱", label: "فيديوهات عضوية",     value: "36"  },
-      { icon: "📢", label: "فيديوهات معلنين",    value: "35"  },
-      { icon: "📷", label: "منشورات إنستغرام",   value: "18"  },
-      { icon: "🔁", label: "ستوري إنستغرام",     value: "204" },
-      { icon: "🎨", label: "تصاميم بصرية",       value: "25"  },
-    ],
-    bestVideo: {
-      title: "تجربة سارة",
-      views: "168,000",
-      likes: "986",
-      note: "بداية الفيديو بلقطة تجربة واقعية ساعدت في جذب الجمهور وزيادة مدة المشاهدة."
-    }
-  },
-
-  tiktok: {
-    rows: [
-      { indicator: "مشاهدات المحتوى",  prev: "58,000", current: "567,000", diff: "+509,000", growth: "+878%"  },
-      { indicator: "مشاهدات الحساب",   prev: "2,744",  current: "21,000",  diff: "+18,256",  growth: "+665%"  },
-      { indicator: "الإعجابات",         prev: "874",    current: "7,553",   diff: "+6,679",   growth: "+764%"  },
-      { indicator: "التعليقات",         prev: "80",     current: "549",     diff: "+469",     growth: "+586%"  },
-      { indicator: "المشاركات",         prev: "462",    current: "6,419",   diff: "+5,957",   growth: "+1,289%" },
-    ],
-    insight: "حقق تيك توك أعلى قفزة في الوصول والتفاعل، مما يجعله قناة رئيسية لبناء الوعي وجذب جمهور جديد للمطعم."
-  },
-
-  instagram: {
-    cards: [
-      { icon: "👁", label: "المشاهدات",    value: "69,432" },
-      { icon: "❤️", label: "التفاعل",      value: "1,599"  },
-      { icon: "📡", label: "الوصول",       value: "2,867"  },
-      { icon: "📈", label: "نمو الحساب",   value: "+29.5%", cls: "success" },
-    ],
-    note: "إنستغرام مناسب لتعزيز الثقة البصرية، عرض الأجواء، إبراز العوائل، وإعادة نشر تجارب العملاء والمعلنين."
-  },
-
-  googleMaps: {
-    cards: [
-      { icon: "📋", label: "مشاهدات الملف",    value: "42,521" },
-      { icon: "🔍", label: "عمليات البحث",      value: "13,778" },
-      { icon: "📞", label: "المكالمات",          value: "3,513"  },
-      { icon: "🗺️", label: "طلبات الاتجاهات",  value: "4,025"  },
-      { icon: "🍽️", label: "دخول المنيو",       value: "5,801"  },
-      { icon: "🤝", label: "إجمالي التفاعل",    value: "13,826" },
-    ],
-    table: [
-      { period: "الأسبوع الأول",  reviews: "47",              replied: "47",              notes: "ارتفاع ملاحظات تجربة الغداء"       },
-      { period: "الأسبوع الثاني", reviews: "71",              replied: "68",              notes: "تفاعل إيجابي مع عرض الغداء"        },
-      { period: "الأسبوع الثالث", reviews: "89",              replied: "83",              notes: "زيادة ذكر المشويات والخدمة"        },
-      { period: "الأسبوع الرابع", reviews: "قيد التحديث",    replied: "قيد التحديث",    notes: "—"                                  },
-    ],
-    insight: "قوقل ماب يمثل قناة تحويل عالية الأهمية؛ لأن العميل الذي يصل من البحث أو الاتجاهات يكون غالبًا قريبًا من قرار الزيارة."
-  },
-
-  campaigns: {
-    rows: [
-      { name: "حملة الفطور", period: "17 فبراير - 19 مارس", goal: "زيادة المبيعات", influencers: "11", views: "193,000", engagement: "5,000", visits: "5,000",  bestVideo: "106,000" },
-      { name: "حملة رمضان",  period: "يناير",               goal: "زيادة الوعي",   influencers: "21", views: "271,000", engagement: "7,000", visits: "11,000", bestVideo: "168,000" },
-    ],
-    total: { name: "الإجمالي", period: "—", goal: "—", influencers: "32", views: "464,000", engagement: "12,800", visits: "16,000", bestVideo: "—" }
-  },
-
-  influencers: {
-    cards: [
-      { icon: "👥", label: "عدد المعلنين",       value: "32"    },
-      { icon: "✅", label: "عدد الحاضرين",       value: "7"     },
-      { icon: "🤝", label: "عدد المنسق معهم",    value: "9"     },
-      { icon: "🏆", label: "أفضل معلن أداء",     value: "سارة", cls: "brown" },
-    ],
-    note: "استراتيجية المعلنين دعمت الانتشار السريع والوصول إلى جماهير متنوعة، خصوصًا في الفترات الموسمية."
-  },
-
-  delivery: {
-    items: [
-      { icon: "🖼️", label: "تحديث صور المنتجات",              done: true },
-      { icon: "🔀", label: "فصل منتجات المشاوي",               done: true },
-      { icon: "🔤", label: "كتابة أسماء عربية وإنجليزية",      done: true },
-      { icon: "📝", label: "كتابة أوصاف عربية وإنجليزية",     done: true },
-      { icon: "🗑️", label: "حذف المنتجات القديمة والمجمعة",   done: true },
-    ],
-    insight: "تحسين ترتيب المنتجات والصور داخل تطبيقات التوصيل يساعد في رفع وضوح الطلب وتقليل تشتت العميل، خصوصًا في أقسام المشاوي والوجبات العائلية."
-  },
-
-  notes: [
-    { tag: "ملاحظة تسويقية",  type: "marketing", text: "المحتوى الواقعي وتجارب العملاء يعطي نتائج أفضل من المحتوى الإعلاني المباشر." },
-    { tag: "ملاحظة تشغيلية",  type: "ops",        text: "زيادة الطلبات في فترات الغداء تتطلب جاهزية أعلى في سرعة الخدمة والتعامل مع الازدحام." },
-    { tag: "ملاحظة منصات",    type: "platforms",  text: "تيك توك مناسب للوصول، إنستغرام مناسب للثقة، قوقل ماب مناسب للتحويل." },
-    { tag: "ملاحظة مبيعات",   type: "sales",      text: "نمو الفواتير أهم من نمو المشاهدات لأنه يعكس تحسن الحركة الفعلية داخل المطعم." },
-  ],
-
-  plan: [
-    { icon: "🍽️", name: "تكثيف محتوى الغداء",    text: "إنتاج محتوى يربط عرض الغداء بتجربة العائلة والعمل والزيارات السريعة." },
-    { icon: "📍", name: "تعزيز قوقل ماب",         text: "رفع معدل الردود اليومية، وتحفيز العملاء الراضين على كتابة تقييمات مفصلة." },
-    { icon: "🎞️", name: "رفع جودة Reels",         text: "التركيز على أول 3 ثواني من الفيديو، واستخدام لقطات دخول المطعم، المشاوي، وتجربة العوائل." },
-    { icon: "📦", name: "متابعة تطبيقات التوصيل", text: "مراجعة أداء المنتجات بعد تحديث الصور والأوصاف، ومعرفة المنتجات الأعلى والأقل طلبًا." },
-  ]
-};
-
-/* ==========================================
-   TAB DEFINITIONS
-   ========================================== */
-const tabs = [
-  { id: "overview",   label: "نظرة عامة"      },
-  { id: "sales",      label: "المبيعات"        },
-  { id: "content",    label: "المحتوى"         },
-  { id: "tiktok",     label: "تيك توك"         },
-  { id: "instagram",  label: "إنستغرام"        },
-  { id: "gmaps",      label: "قوقل ماب"        },
-  { id: "campaigns",  label: "الحملات"         },
-  { id: "influencers",label: "المعلنين"        },
-  { id: "delivery",   label: "تطبيقات التوصيل" },
-  { id: "notes",      label: "الملاحظات"       },
-  { id: "plan",       label: "الخطة القادمة"   },
-];
-
-/* ==========================================
-   RENDERERS
-   ========================================== */
-
-function renderKPIs() {
-  const grid = document.getElementById('kpiGrid');
-  grid.innerHTML = dashboardData.kpis.map(k => `
-    <div class="kpi-card">
-      <div class="kpi-label">${k.label}</div>
-      <div class="kpi-value ${k.type}">${k.value}</div>
-    </div>
-  `).join('');
+async function initSupabase() {
+  if (typeof window.supabase !== 'undefined') {
+    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    return true;
+  }
+  return false;
 }
 
-function renderSummary() {
-  document.getElementById('summaryText').textContent = dashboardData.summary;
+// ============================================================
+// FORMAT HELPERS
+// ============================================================
+function fmt(n) {
+  if (n === null || n === undefined) return '—';
+  if (n >= 1000000) return (n/1000000).toFixed(1) + 'م';
+  if (n >= 1000) return (n/1000).toFixed(1) + 'ك';
+  return n.toString();
+}
+function fmtMoney(n) {
+  if (!n) return '—';
+  return n.toLocaleString('ar-SA') + ' ₺';
+}
+function fmtPct(n) {
+  if (n === null || n === undefined) return '—';
+  return (n > 0 ? '+' : '') + n + '%';
+}
+function trendClass(n) {
+  if (!n) return 'trend-neutral';
+  return n > 0 ? 'trend-up' : 'trend-down';
+}
+function trendIcon(n) {
+  if (!n) return '→';
+  return n > 0 ? '↑' : '↓';
 }
 
-function comparisonTable(rows) {
-  return `
-    <div class="table-wrap">
-      <table>
-        <thead><tr>
-          <th>المؤشر</th>
-          <th>الفترة السابقة</th>
-          <th>الفترة التسويقية</th>
-          <th>الفرق</th>
-          <th>النمو</th>
-        </tr></thead>
-        <tbody>
-          ${rows.map(r => `
-            <tr>
-              <td><strong>${r.indicator}</strong></td>
-              <td class="cell-neutral">${r.prev}</td>
-              <td><strong>${r.current}</strong></td>
-              <td class="${r.diff.startsWith('+') ? 'cell-positive' : (r.diff === 'ثابت' ? 'cell-neutral' : 'cell-negative')}">${r.diff}</td>
-              <td class="${r.growth.startsWith('+') ? 'cell-positive' : 'cell-neutral'}">${r.growth}</td>
-            </tr>
-          `).join('')}
-        </tbody>
-      </table>
-    </div>`;
+// ============================================================
+// LOAD REPORT
+// ============================================================
+async function loadReport() {
+  const month = parseInt(document.getElementById('selMonth').value);
+  const week = parseInt(document.getElementById('selWeek').value);
+  const main = document.getElementById('mainContent');
+
+  main.innerHTML = '<div id="loadingState"><div class="spinner"></div><p>جارٍ التحميل...</p></div>';
+
+  if (!supabase || SUPABASE_URL === 'YOUR_SUPABASE_URL') {
+    renderNoConfig();
+    return;
+  }
+
+  const { data, error } = await supabase
+    .from('reports')
+    .select('dashboard_data, report_data, created_at, status')
+    .eq('month', month)
+    .eq('week_number', week)
+    .eq('status', 'published')
+    .order('created_at', { ascending: false })
+    .limit(1);
+
+  if (error || !data || data.length === 0) {
+    renderEmpty();
+    return;
+  }
+
+  currentData = data[0];
+  const d = data[0].dashboard_data;
+  const rd = data[0].report_data;
+  const date = new Date(data[0].created_at).toLocaleDateString('ar-SA', {
+    year:'numeric', month:'long', day:'numeric'
+  });
+
+  document.getElementById('reportDateLabel').textContent = 'آخر تحديث: ' + date;
+  renderDashboard(d, rd);
 }
 
-function renderOverview() {
-  const d = dashboardData;
-  return `
-    <div class="section-title">متابعة الأسابيع</div>
-    <div class="week-grid">
-      ${d.weeks.map(w => `
-        <div class="week-card">
-          <div class="week-number">${w.num}</div>
-          <div class="week-dates">${w.dates}</div>
-          <span class="week-status ${w.done ? 'done' : 'pending'}">${w.status}</span>
-        </div>
-      `).join('')}
-    </div>
-    <div class="insight-card brown">
-      <div class="insight-title">📊 قراءة عامة</div>
-      <div class="insight-text">الأداء العام يشير إلى نمو واضح في المبيعات والفواتير، مع استمرار تأثير المحتوى والحملات على رفع الوصول، وزيادة دخول العملاء من قوقل ماب والمنصات الاجتماعية.</div>
-    </div>
-  `;
-}
+// ============================================================
+// RENDER DASHBOARD
+// ============================================================
+function renderDashboard(d, rd) {
+  const main = document.getElementById('mainContent');
+  const months = ['','يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
 
-function renderSales() {
-  const d = dashboardData.sales;
-  return `
-    <div class="section-title">مقارنة المبيعات</div>
-    ${comparisonTable(d.rows)}
-    <div class="insight-card">
-      <div class="insight-title">✅ أثر التسويق على المبيعات</div>
-      <div class="insight-text">${d.insight}</div>
-    </div>
-  `;
-}
+  const targetPct = Math.min(100, d.targetAchievement || 0);
+  const fillColor = targetPct >= 90 ? 'green' : targetPct >= 60 ? '' : 'amber';
 
-function renderContent() {
-  const d = dashboardData.content;
-  return `
-    <div class="section-title">إنتاج المحتوى</div>
-    <div class="mini-grid">
-      ${d.cards.map(c => `
-        <div class="mini-card">
-          <div class="mini-icon">${c.icon}</div>
-          <div>
-            <div class="mini-label">${c.label}</div>
-            <div class="mini-value">${c.value}</div>
-          </div>
-        </div>
-      `).join('')}
-    </div>
-    <div class="best-video-card">
-      <div class="best-video-title">🏆 أفضل فيديو في الشهر</div>
-      <div class="video-meta-row">
-        <div class="video-meta-item"><div class="video-meta-key">العنوان</div><div class="video-meta-val" style="font-size:17px">${d.bestVideo.title}</div></div>
-        <div class="video-meta-item"><div class="video-meta-key">المشاهدات</div><div class="video-meta-val">${d.bestVideo.views}</div></div>
-        <div class="video-meta-item"><div class="video-meta-key">الإعجابات</div><div class="video-meta-val">${d.bestVideo.likes}</div></div>
+  const achievementItems = (rd.achievements || '').split('\n').filter(l => l.trim());
+  const nextPlanItems = (rd.nextPlan || '').split('\n').filter(l => l.trim());
+
+  main.innerHTML = `
+    <!-- KPI GRID -->
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-icon">💰</div>
+        <div class="kpi-val num">${fmtMoney(d.salesTotal)}</div>
+        <div class="kpi-label">إجمالي المبيعات</div>
+        <div class="kpi-trend ${trendClass(d.salesGrowth)}">${trendIcon(d.salesGrowth)} ${fmtPct(d.salesGrowth)}</div>
       </div>
-      <div class="insight-card brown" style="margin-top:0">
-        <div class="insight-title">💡 الملاحظة</div>
-        <div class="insight-text">${d.bestVideo.note}</div>
+      <div class="kpi-card">
+        <div class="kpi-icon">📦</div>
+        <div class="kpi-val num">${fmt(d.orders)}</div>
+        <div class="kpi-label">عدد الطلبات</div>
+        <div class="kpi-trend trend-neutral">متوسط: ${fmtMoney(d.avgOrder)}</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon">👁️</div>
+        <div class="kpi-val num">${fmt(d.totalViews)}</div>
+        <div class="kpi-label">إجمالي المشاهدات</div>
+        <div class="kpi-trend trend-neutral">تيك توك + إنستا</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon">❤️</div>
+        <div class="kpi-val num">${fmt(d.totalEngagement)}</div>
+        <div class="kpi-label">إجمالي التفاعل</div>
+        <div class="kpi-trend trend-neutral">إعجاب + تعليق + مشاركة</div>
       </div>
     </div>
-  `;
-}
 
-function renderTiktok() {
-  const d = dashboardData.tiktok;
-  return `
-    <div class="section-title">أداء تيك توك</div>
-    ${comparisonTable(d.rows)}
-    <div class="insight-card amber">
-      <div class="insight-title">🚀 قراءة الأداء</div>
-      <div class="insight-text">${d.insight}</div>
-    </div>
-  `;
-}
+    <!-- SALES & TARGET -->
+    <div class="content-grid">
+      <div class="card">
+        <div class="card-head">
+          <div class="card-icon">💰</div>
+          <div><div class="card-title">أداء المبيعات</div><div class="card-sub">هذا الأسبوع</div></div>
+        </div>
+        <div class="card-body">
+          <div class="stats-row" style="margin-bottom:16px">
+            <div class="stat-item"><div class="stat-val">${fmtMoney(d.salesTotal)}</div><div class="stat-lbl">إجمالي</div></div>
+            <div class="stat-item"><div class="stat-val">${fmt(d.orders)}</div><div class="stat-lbl">طلبات</div></div>
+            <div class="stat-item"><div class="stat-val">${fmtMoney(d.avgOrder)}</div><div class="stat-lbl">متوسط</div></div>
+          </div>
+          <div class="progress-wrap">
+            <div class="progress-head">
+              <span class="progress-label">تحقيق الهدف</span>
+              <span class="progress-val">${targetPct}%</span>
+            </div>
+            <div class="progress-track">
+              <div class="progress-fill ${fillColor}" style="width:${targetPct}%"></div>
+            </div>
+          </div>
+          ${rd.salesNotes ? '<p style="font-size:13px;color:var(--t2);margin-top:12px;line-height:1.6">' + rd.salesNotes + '</p>' : ''}
+        </div>
+      </div>
 
-function renderInstagram() {
-  const d = dashboardData.instagram;
-  return `
-    <div class="section-title">أداء إنستغرام</div>
-    <div class="mini-grid">
-      ${d.cards.map(c => `
-        <div class="mini-card">
-          <div class="mini-icon">${c.icon}</div>
-          <div>
-            <div class="mini-label">${c.label}</div>
-            <div class="mini-value ${c.cls||''}">${c.value}</div>
+      <div class="card">
+        <div class="card-head">
+          <div class="card-icon">📸</div>
+          <div><div class="card-title">إنتاج المحتوى</div><div class="card-sub">ما تم إنتاجه هذا الأسبوع</div></div>
+        </div>
+        <div class="card-body">
+          <div class="stats-row">
+            <div class="stat-item"><div class="stat-val">${d.posts || 0}</div><div class="stat-lbl">بوستات</div></div>
+            <div class="stat-item"><div class="stat-val">${d.stories || 0}</div><div class="stat-lbl">ستوريات</div></div>
+            <div class="stat-item"><div class="stat-val">${d.videos || 0}</div><div class="stat-lbl">فيديو</div></div>
+            <div class="stat-item"><div class="stat-val">${d.reels || 0}</div><div class="stat-lbl">ريلز</div></div>
           </div>
         </div>
-      `).join('')}
+      </div>
     </div>
-    <div class="insight-card blue">
-      <div class="insight-title">📌 دور إنستغرام</div>
-      <div class="insight-text">${d.note}</div>
-    </div>
-  `;
-}
 
-function renderGmaps() {
-  const d = dashboardData.googleMaps;
-  return `
-    <div class="section-title">أداء قوقل ماب — بيانات شهرية</div>
-    <div class="mini-grid">
-      ${d.cards.map(c => `
-        <div class="mini-card">
-          <div class="mini-icon">${c.icon}</div>
-          <div>
-            <div class="mini-label">${c.label}</div>
-            <div class="mini-value">${c.value}</div>
+    <!-- TIKTOK & INSTAGRAM -->
+    <div class="content-grid">
+      <div class="card">
+        <div class="card-head">
+          <div class="card-icon">🎵</div>
+          <div><div class="card-title">أداء تيك توك</div></div>
+        </div>
+        <div class="card-body">
+          <div class="stats-row">
+            <div class="stat-item"><div class="stat-val">${fmt(d.ttViews)}</div><div class="stat-lbl">مشاهدات</div></div>
+            <div class="stat-item"><div class="stat-val">${fmt(d.ttFollowers)}</div><div class="stat-lbl">متابعون جدد</div></div>
+            <div class="stat-item"><div class="stat-val">${fmt(rd.ttLikes)}</div><div class="stat-lbl">إعجابات</div></div>
+          </div>
+          <div class="progress-wrap" style="margin-top:16px">
+            <div class="progress-head">
+              <span class="progress-label">أفضل فيديو</span>
+              <span class="progress-val">${fmt(rd.ttTop)} مشاهدة</span>
+            </div>
+            <div class="progress-track">
+              <div class="progress-fill blue" style="width:${rd.ttViews > 0 ? Math.min(100,Math.round(rd.ttTop/rd.ttViews*100)) : 0}%"></div>
+            </div>
           </div>
         </div>
-      `).join('')}
-    </div>
-    <div class="section-title" style="margin-top:24px">متابعة التقييمات الأسبوعية</div>
-    <div class="table-wrap">
-      <table>
-        <thead><tr>
-          <th>الفترة</th>
-          <th>تقييمات جديدة</th>
-          <th>تم الرد</th>
-          <th>ملاحظات العملاء</th>
-        </tr></thead>
-        <tbody>
-          ${d.table.map(r => `
-            <tr>
-              <td><strong>${r.period}</strong></td>
-              <td class="${r.reviews === 'قيد التحديث' ? 'cell-pending' : 'cell-positive'}">${r.reviews}</td>
-              <td class="${r.replied === 'قيد التحديث' ? 'cell-pending' : ''}">${r.replied}</td>
-              <td class="cell-neutral">${r.notes}</td>
-            </tr>
-          `).join('')}
-        </tbody>
-      </table>
-    </div>
-    <div class="insight-card">
-      <div class="insight-title">📍 أهمية قوقل ماب</div>
-      <div class="insight-text">${d.insight}</div>
-    </div>
-  `;
-}
+      </div>
 
-function renderCampaigns() {
-  const d = dashboardData.campaigns;
-  const t = d.total;
-  return `
-    <div class="section-title">الحملات التسويقية</div>
-    <div class="table-wrap">
-      <table>
-        <thead><tr>
-          <th>الحملة</th>
-          <th>الفترة</th>
-          <th>الهدف</th>
-          <th>المعلنون</th>
-          <th>المشاهدات</th>
-          <th>التفاعل</th>
-          <th>الزيارات</th>
-          <th>أفضل فيديو</th>
-        </tr></thead>
-        <tbody>
-          ${d.rows.map(r => `
-            <tr>
-              <td><strong class="cell-brown">${r.name}</strong></td>
-              <td class="cell-neutral">${r.period}</td>
-              <td>${r.goal}</td>
-              <td>${r.influencers}</td>
-              <td class="cell-positive">${r.views}</td>
-              <td>${r.engagement}</td>
-              <td>${r.visits}</td>
-              <td class="cell-brown">${r.bestVideo}</td>
-            </tr>
-          `).join('')}
-          <tr class="total-row">
-            <td>${t.name}</td>
-            <td>${t.period}</td>
-            <td>${t.goal}</td>
-            <td class="cell-brown">${t.influencers}</td>
-            <td class="cell-positive">${t.views}</td>
-            <td>${t.engagement}</td>
-            <td>${t.visits}</td>
-            <td>${t.bestVideo}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  `;
-}
-
-function renderInfluencers() {
-  const d = dashboardData.influencers;
-  return `
-    <div class="section-title">المعلنون</div>
-    <div class="mini-grid">
-      ${d.cards.map(c => `
-        <div class="mini-card">
-          <div class="mini-icon">${c.icon}</div>
-          <div>
-            <div class="mini-label">${c.label}</div>
-            <div class="mini-value ${c.cls||''}">${c.value}</div>
+      <div class="card">
+        <div class="card-head">
+          <div class="card-icon">📷</div>
+          <div><div class="card-title">أداء إنستاغرام</div></div>
+        </div>
+        <div class="card-body">
+          <div class="stats-row">
+            <div class="stat-item"><div class="stat-val">${fmt(d.igReach)}</div><div class="stat-lbl">وصول</div></div>
+            <div class="stat-item"><div class="stat-val">${fmt(d.igFollowers)}</div><div class="stat-lbl">متابعون جدد</div></div>
+            <div class="stat-item"><div class="stat-val">${d.igEngagement || 0}%</div><div class="stat-lbl">تفاعل</div></div>
+          </div>
+          <div class="progress-wrap" style="margin-top:16px">
+            <div class="progress-head">
+              <span class="progress-label">نسبة التفاعل</span>
+              <span class="progress-val">${d.igEngagement || 0}%</span>
+            </div>
+            <div class="progress-track">
+              <div class="progress-fill" style="width:${Math.min(100, (d.igEngagement || 0) * 10)}%"></div>
+            </div>
           </div>
         </div>
-      `).join('')}
+      </div>
     </div>
-    <div class="insight-card amber">
-      <div class="insight-title">🌟 استراتيجية المعلنين</div>
-      <div class="insight-text">${d.note}</div>
-    </div>
-  `;
-}
 
-function renderDelivery() {
-  const d = dashboardData.delivery;
-  return `
-    <div class="section-title">تحديثات تطبيقات التوصيل</div>
-    <div style="background:var(--bg-main);border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow-sm);margin-bottom:24px;">
-      ${d.items.map((item, i) => `
-        <div style="display:flex;align-items:center;gap:16px;padding:16px 20px;${i < d.items.length - 1 ? 'border-bottom:1px solid var(--border)' : ''}">
-          <span style="font-size:20px">${item.icon}</span>
-          <span style="flex:1;font-size:14px;font-weight:500">${item.label}</span>
-          <span class="chip-done">مكتمل</span>
+    <!-- GOOGLE MAPS & INFLUENCERS -->
+    <div class="content-grid">
+      <div class="card">
+        <div class="card-head">
+          <div class="card-icon">📍</div>
+          <div><div class="card-title">خرائط Google</div></div>
         </div>
-      `).join('')}
-    </div>
-    <div class="insight-card">
-      <div class="insight-title">💡 الأثر المتوقع</div>
-      <div class="insight-text">${d.insight}</div>
-    </div>
-  `;
-}
-
-function renderNotes() {
-  const d = dashboardData.notes;
-  return `
-    <div class="section-title">الملاحظات</div>
-    <div class="notes-grid">
-      ${d.map(n => `
-        <div class="note-card">
-          <div class="note-tag ${n.type}">${n.tag}</div>
-          <div class="note-text">${n.text}</div>
+        <div class="card-body">
+          <div class="stats-row">
+            <div class="stat-item"><div class="stat-val">${fmt(d.gmViews)}</div><div class="stat-lbl">مشاهدات</div></div>
+            <div class="stat-item"><div class="stat-val">${fmt(d.gmCalls)}</div><div class="stat-lbl">مكالمات</div></div>
+            <div class="stat-item"><div class="stat-val">${d.gmRating || '—'}</div><div class="stat-lbl">تقييم ⭐</div></div>
+            <div class="stat-item"><div class="stat-val">${fmt(d.gmReviews)}</div><div class="stat-lbl">تعليقات جديدة</div></div>
+          </div>
         </div>
-      `).join('')}
-    </div>
-  `;
-}
+      </div>
 
-function renderPlan() {
-  const d = dashboardData.plan;
-  return `
-    <div class="section-title">الخطة القادمة</div>
-    <div class="plan-grid">
-      ${d.map(p => `
-        <div class="plan-card">
-          <div class="plan-icon">${p.icon}</div>
-          <div class="plan-name">${p.name}</div>
-          <div class="plan-text">${p.text}</div>
+      <div class="card">
+        <div class="card-head">
+          <div class="card-icon">⭐</div>
+          <div><div class="card-title">المؤثرون</div></div>
         </div>
-      `).join('')}
+        <div class="card-body">
+          <div class="stats-row" style="margin-bottom:12px">
+            <div class="stat-item"><div class="stat-val">${d.influencers || 0}</div><div class="stat-lbl">تواصل</div></div>
+            <div class="stat-item"><div class="stat-val">${d.infVisited || 0}</div><div class="stat-lbl">زيارات</div></div>
+            <div class="stat-item"><div class="stat-val">${fmt(d.campReach)}</div><div class="stat-lbl">وصول الحملة</div></div>
+          </div>
+          ${rd.infNotes ? '<p style="font-size:13px;color:var(--t2);line-height:1.6">' + rd.infNotes + '</p>' : ''}
+        </div>
+      </div>
+    </div>
+
+    <!-- CAMPAIGNS & DELIVERY -->
+    <div class="content-grid">
+      <div class="card">
+        <div class="card-head">
+          <div class="card-icon">🎯</div>
+          <div><div class="card-title">الحملات الإعلانية</div></div>
+        </div>
+        <div class="card-body">
+          <div class="stats-row">
+            <div class="stat-item"><div class="stat-val">${fmtMoney(d.campSpend)}</div><div class="stat-lbl">إنفاق</div></div>
+            <div class="stat-item"><div class="stat-val">${fmt(d.campReach)}</div><div class="stat-lbl">وصول</div></div>
+            <div class="stat-item"><div class="stat-val">${fmt(rd.campClicks)}</div><div class="stat-lbl">نقرات</div></div>
+          </div>
+          ${rd.campNotes ? '<p style="font-size:13px;color:var(--t2);margin-top:12px;line-height:1.6">' + rd.campNotes + '</p>' : ''}
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <div class="card-icon">🛵</div>
+          <div><div class="card-title">تطبيقات التوصيل</div></div>
+        </div>
+        <div class="card-body">
+          <div class="stats-row">
+            <div class="stat-item"><div class="stat-val">${fmt(d.deliveryOrders)}</div><div class="stat-lbl">طلبات</div></div>
+            <div class="stat-item"><div class="stat-val">${fmtPct(d.deliveryGrowth)}</div><div class="stat-lbl">نمو</div></div>
+            <div class="stat-item"><div class="stat-val">${rd.delRating || '—'} ⭐</div><div class="stat-lbl">تقييم</div></div>
+          </div>
+          ${rd.delNotes ? '<p style="font-size:13px;color:var(--t2);margin-top:12px;line-height:1.6">' + rd.delNotes + '</p>' : ''}
+        </div>
+      </div>
+    </div>
+
+    <!-- ACHIEVEMENTS -->
+    ${rd.achievements ? `
+    <div class="card">
+      <div class="card-head">
+        <div class="card-icon">🏆</div>
+        <div><div class="card-title">إنجازات الأسبوع</div></div>
+      </div>
+      <div class="card-body">
+        <div class="achievement-list">
+          ${achievementItems.length > 0 
+            ? achievementItems.map(item => `<div class="achievement-item"><div class="ach-icon">✅</div><div class="ach-text">${item}</div></div>`).join('')
+            : '<div class="text-block green">' + rd.achievements + '</div>'
+          }
+        </div>
+      </div>
+    </div>` : ''}
+
+    <!-- NOTES & NEXT PLAN -->
+    <div class="content-grid">
+      ${rd.notes ? `
+      <div class="card">
+        <div class="card-head">
+          <div class="card-icon">📌</div>
+          <div><div class="card-title">ملاحظات هامة</div></div>
+        </div>
+        <div class="card-body">
+          <div class="text-block amber">${rd.notes}</div>
+        </div>
+      </div>` : ''}
+
+      ${rd.nextPlan ? `
+      <div class="card">
+        <div class="card-head">
+          <div class="card-icon">📅</div>
+          <div><div class="card-title">خطة الأسبوع القادم</div></div>
+        </div>
+        <div class="card-body">
+          ${nextPlanItems.length > 0
+            ? nextPlanItems.map((item,i) => `<div style="display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)"><span style="font-size:12px;font-weight:700;color:var(--br);background:var(--bg3);width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0">${i+1}</span><span style="font-size:13px;color:var(--t1);line-height:1.6">${item}</span></div>`).join('')
+            : '<div class="text-block">' + rd.nextPlan + '</div>'
+          }
+        </div>
+      </div>` : ''}
     </div>
   `;
 }
 
-/* ==========================================
-   TAB CONTENT MAP
-   ========================================== */
-const tabRenderers = {
-  overview:    renderOverview,
-  sales:       renderSales,
-  content:     renderContent,
-  tiktok:      renderTiktok,
-  instagram:   renderInstagram,
-  gmaps:       renderGmaps,
-  campaigns:   renderCampaigns,
-  influencers: renderInfluencers,
-  delivery:    renderDelivery,
-  notes:       renderNotes,
-  plan:        renderPlan,
-};
-
-/* ==========================================
-   SWITCH TAB FUNCTION
-   ========================================== */
-function switchTab(tabId) {
-  // Update nav buttons
-  document.querySelectorAll('.tab-btn').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.tab === tabId);
-  });
-  // Update content panels
-  document.querySelectorAll('.tab-content').forEach(panel => {
-    panel.classList.remove('active');
-  });
-  const panel = document.getElementById('tab-' + tabId);
-  if (panel) panel.classList.add('active');
+// ============================================================
+// EMPTY / ERROR STATES
+// ============================================================
+function renderEmpty() {
+  document.getElementById('mainContent').innerHTML = `
+    <div class="empty-rep">
+      <div class="big-icon">📊</div>
+      <h2>لا يوجد تقرير منشور لهذه الفترة</h2>
+      <p>جرّب اختيار أسبوع أو شهر مختلف</p>
+    </div>
+  `;
 }
 
-/* ==========================================
-   INIT
-   ========================================== */
-function init() {
-  renderSummary();
-  renderKPIs();
-
-  const nav = document.getElementById('tabsNav');
-  const container = document.getElementById('tabsContainer');
-
-  tabs.forEach((tab, idx) => {
-    // Build nav button
-    const btn = document.createElement('button');
-    btn.className = 'tab-btn' + (idx === 0 ? ' active' : '');
-    btn.dataset.tab = tab.id;
-    btn.textContent = tab.label;
-    btn.addEventListener('click', () => switchTab(tab.id));
-    nav.appendChild(btn);
-
-    // Build content panel
-    const panel = document.createElement('div');
-    panel.className = 'tab-content' + (idx === 0 ? ' active' : '');
-    panel.id = 'tab-' + tab.id;
-    panel.innerHTML = tabRenderers[tab.id] ? tabRenderers[tab.id]() : '';
-    container.appendChild(panel);
-  });
+function renderNoConfig() {
+  document.getElementById('mainContent').innerHTML = `
+    <div class="empty-rep">
+      <div class="big-icon">⚙️</div>
+      <h2>يرجى إعداد قاعدة البيانات</h2>
+      <p>أضف SUPABASE_URL و SUPABASE_KEY في الكود لعرض التقارير</p>
+    </div>
+  `;
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-  checkAuth();
-  // Allow Enter key on password field to trigger login
-  document.getElementById('loginPassword').addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') handleLogin();
-  });
-  document.getElementById('loginUsername').addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') handleLogin();
-  });
+// ============================================================
+// INIT
+// ============================================================
+document.addEventListener('DOMContentLoaded', async () => {
+  const now = new Date();
+  document.getElementById('selMonth').value = now.getMonth() + 1;
+
+  await initSupabase();
+
+  if (!supabase || SUPABASE_URL === 'YOUR_SUPABASE_URL') {
+    // Load latest report without filter
+    renderNoConfig();
+    return;
+  }
+
+  // Try to load the latest published report first
+  const { data: latest } = await supabase
+    .from('reports')
+    .select('month, week_number')
+    .eq('status', 'published')
+    .order('created_at', { ascending: false })
+    .limit(1);
+
+  if (latest && latest.length > 0) {
+    document.getElementById('selMonth').value = latest[0].month;
+    document.getElementById('selWeek').value = latest[0].week_number;
+  }
+
+  loadReport();
 });
-
-/* ==========================================
-   AUTH FUNCTIONS
-   ========================================== */
-const AUTH_KEY = 'almazar_dashboard_auth';
-const VALID_USER = 'almazar';
-const VALID_PASS = '12345';
-
-function checkAuth() {
-  if (localStorage.getItem(AUTH_KEY) === 'true') {
-    showDashboard();
-  } else {
-    showLogin();
-  }
-  // Always init dashboard content regardless (rendered hidden)
-  init();
-}
-
-function showDashboard() {
-  document.getElementById('loginScreen').style.display = 'none';
-  document.getElementById('dashboardApp').style.display = 'block';
-}
-
-function showLogin() {
-  document.getElementById('dashboardApp').style.display = 'none';
-  document.getElementById('loginScreen').style.display = 'flex';
-}
-
-function handleLogin() {
-  const user = document.getElementById('loginUsername').value.trim();
-  const pass = document.getElementById('loginPassword').value;
-  const err  = document.getElementById('loginError');
-
-  if (user === VALID_USER && pass === VALID_PASS) {
-    err.classList.remove('visible');
-    localStorage.setItem(AUTH_KEY, 'true');
-    showDashboard();
-  } else {
-    err.classList.remove('visible');
-    // Force reflow to restart shake animation
-    void err.offsetWidth;
-    err.classList.add('visible');
-    document.getElementById('loginPassword').value = '';
-    document.getElementById('loginPassword').focus();
-  }
-}
-
-function handleLogout() {
-  localStorage.removeItem(AUTH_KEY);
-  document.getElementById('loginUsername').value = '';
-  document.getElementById('loginPassword').value = '';
-  document.getElementById('loginError').classList.remove('visible');
-  showLogin();
-}
 </script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </body>
 </html>
